@@ -11,10 +11,11 @@ public interface ClassGenerator {
     /**
      * Adds a public static final field of type {@link String}.
      */
-    void addPublicConstantString(String variableName, String variableValue);
+    ClassGenerator addPublicConstantString(String variableName, String variableValue);
 
     /**
-     * Writes the generated Java file to the given path.
+     * Writes the generated Java file to the given directory.
+     * @return the path to the generated Java file
      */
-    void writeToPath(Path path) throws IOException;
+    Path write(Path directory) throws IOException;
 }

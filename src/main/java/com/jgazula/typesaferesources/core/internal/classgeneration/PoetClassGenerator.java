@@ -29,16 +29,17 @@ public class PoetClassGenerator implements ClassGenerator {
     }
 
     @Override
-    public void addPublicConstantString(String variableName, String variableValue) {
+    public ClassGenerator addPublicConstantString(String variableName, String variableValue) {
         FieldSpec fieldSpec = FieldSpec.builder(String.class, variableName)
                 .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
                 .initializer("$S", variableValue)
                 .build();
         fieldSpecs.add(fieldSpec);
+        return this;
     }
 
     @Override
-    public void writeToPath(Path path) throws IOException {
+    public Path write(Path directory) throws IOException {
         TypeSpec typeSpec = TypeSpec.classBuilder(config.className())
                 .addModifiers(Modifier.PUBLIC)
                 .addFields(fieldSpecs)
@@ -47,7 +48,9 @@ public class PoetClassGenerator implements ClassGenerator {
         Path outputPath = JavaFile.builder(config.packageName(), typeSpec)
                 .indent(INDENT)
                 .build()
-                .writeToPath(path, StandardCharsets.UTF_8);
+                .writeToPath(directory, StandardCharsets.UTF_8);
         LOGGER.debug("Wrote Java file for {}.{} to {}", config.packageName(), config.className(), outputPath);
+
+        return outputPath;
     }
 }
