@@ -9,7 +9,7 @@ import java.nio.file.Path;
 @Value.Immutable
 public interface PCFileConfig {
 
-    Path filePath();
+    Path propertiesPath();
     String generatedClassName();
     String generatedPackageName();
 

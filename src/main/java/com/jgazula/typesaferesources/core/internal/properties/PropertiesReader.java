@@ -11,9 +11,9 @@ import java.util.Properties;
 public class PropertiesReader {
 
     public Map<String, String> loadProperties(Path path) throws IOException {
-        try (BufferedReader bufferedReader = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {
+        try (BufferedReader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {
             Properties properties = new Properties();
-            properties.load(bufferedReader);
+            properties.load(reader);
             return (Map) properties;
         }
     }
