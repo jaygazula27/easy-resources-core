@@ -54,13 +54,17 @@ class PCGenerator implements PropertiesConstants {
         Map<String, String> properties = propertiesReader.loadProperties(fileConfig.propertiesPath());
         LOGGER.debug("Successfully loaded {} properties from {}", properties.size(), fileConfig.propertiesPath());
 
-        for (Map.Entry<String, String> entry : properties.entrySet()) {
-            String variableName = propertiesParser.keyToStaticFinalVariable(entry.getKey());
-            generator.addPublicConstantString(variableName, entry.getValue());
-        }
+        if (properties.isEmpty()) {
+            LOGGER.warn("The properties file {} is empty. Skipping Java file generation.", fileConfig.propertiesPath());
+        } else {
+            for (Map.Entry<String, String> entry : properties.entrySet()) {
+                String variableName = propertiesParser.keyToStaticFinalVariable(entry.getKey());
+                generator.addPublicConstantString(variableName, entry.getValue());
+            }
 
-        Path writtenPath = generator.write(config.destinationDir());
-        LOGGER.debug("Wrote properties to {}", writtenPath);
-        LOGGER.info("Finished generating constants for {}", fileConfig.propertiesPath());
+            Path writtenPath = generator.write(config.destinationDir());
+            LOGGER.debug("Wrote properties to {}", writtenPath);
+            LOGGER.info("Finished generating constants for {}", fileConfig.propertiesPath());
+        }
     }
 }

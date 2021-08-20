@@ -14,15 +14,12 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class PoetClassGeneratorTests {
-
-    private static final int NUM_OF_CONSTANT_STRINGS = 3;
 
     @TempDir
     Path tmpDir;
@@ -71,10 +68,7 @@ public class PoetClassGeneratorTests {
                 .className(TestConstants.TEST_CLASS_NAME)
                 .build();
 
-        Map<String, String> constantStringInfo = new HashMap<>(NUM_OF_CONSTANT_STRINGS);
-        for (int i = 0; i < NUM_OF_CONSTANT_STRINGS; i++) {
-            constantStringInfo.put(TestHelper.randomAlphabetic(), TestHelper.randomAlphabetic());
-        }
+        Map<String, String> constantStringInfo = TestHelper.generateProperties();
 
         // when
         ClassGenerator classGenerator = new PoetClassGenerator(config);
@@ -92,7 +86,7 @@ public class PoetClassGeneratorTests {
             }
         });
 
-        assertThat(fields).hasSize(NUM_OF_CONSTANT_STRINGS);
+        assertThat(fields).hasSize(constantStringInfo.size());
         for (CtField field : fields) {
             assertThat(constantStringInfo).containsKey(field.getSimpleName());
             String varValue = constantStringInfo.get(field.getSimpleName());

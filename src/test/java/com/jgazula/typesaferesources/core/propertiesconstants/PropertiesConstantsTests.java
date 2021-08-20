@@ -1,13 +1,41 @@
 package com.jgazula.typesaferesources.core.propertiesconstants;
 
+import com.jgazula.typesaferesources.core.testutil.TestConstants;
 import org.junit.jupiter.api.Test;
 
+import java.nio.file.Paths;
+import java.util.Collections;
+
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatNullPointerException;
 
 public class PropertiesConstantsTests {
 
     @Test
-    public void intentionalFail() {
-        assertThat(1).isEqualTo(2);
+    public void nullConfigThrowsException() {
+        assertThatNullPointerException()
+                .isThrownBy(() -> PropertiesConstants.create(null));
+    }
+
+    @Test
+    public void createNewInstance() {
+        // given
+        PCFileConfig fileConfig = PCFileConfig.builder()
+                .generatedPackageName(TestConstants.TEST_PACKAGE_NAME)
+                .generatedClassName(TestConstants.TEST_CLASS_NAME)
+                .propertiesPath(Paths.get(TestConstants.TEST_PROPERTIES_FILE))
+                .build();
+
+
+        PCConfig config = PCConfig.builder()
+                .fileConfigs(Collections.singletonList(fileConfig))
+                .destinationDir(Paths.get(TestConstants.DESTINATION_DIR))
+                .build();
+        // when
+        PropertiesConstants instance = PropertiesConstants.create(config);
+
+        // then
+        assertThat(instance)
+                .isNotNull();
     }
 }
