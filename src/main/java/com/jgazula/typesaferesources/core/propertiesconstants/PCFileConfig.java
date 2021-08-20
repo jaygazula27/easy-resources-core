@@ -21,4 +21,15 @@ public interface PCFileConfig {
             throw new IllegalArgumentException("'generatedPackageName' configuration cannot be empty.");
         }
     }
+
+    static Builder builder() {
+        return ImmutablePCFileConfig.builder();
+    }
+
+    interface Builder {
+        Builder propertiesPath(Path propertiesPath);
+        Builder generatedClassName(String generatedClassName);
+        Builder generatedPackageName(String generatedPackageName);
+        PCFileConfig build();
+    }
 }

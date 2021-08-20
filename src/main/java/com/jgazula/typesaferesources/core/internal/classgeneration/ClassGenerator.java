@@ -11,7 +11,7 @@ public interface ClassGenerator {
     /**
      * Adds a public static final field of type {@link String}.
      */
-    ClassGenerator addPublicConstantString(String variableName, String variableValue);
+    void addPublicConstantString(String variableName, String variableValue);
 
     /**
      * Writes the generated Java file to the given directory.

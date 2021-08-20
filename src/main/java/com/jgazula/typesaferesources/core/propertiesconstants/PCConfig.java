@@ -10,7 +10,16 @@ import java.util.List;
 @Value.Immutable
 public interface PCConfig {
 
-    Path generatedSourcesDir();
-    int maximumFields();
     List<PCFileConfig> fileConfigs();
+    Path destinationDir();
+
+    static Builder builder() {
+        return ImmutablePCConfig.builder();
+    }
+
+    interface Builder {
+        Builder fileConfigs(Iterable<? extends PCFileConfig> elements);
+        Builder destinationDir(Path path);
+        PCConfig build();
+    }
 }

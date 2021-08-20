@@ -29,13 +29,12 @@ public class PoetClassGenerator implements ClassGenerator {
     }
 
     @Override
-    public ClassGenerator addPublicConstantString(String variableName, String variableValue) {
+    public void addPublicConstantString(String variableName, String variableValue) {
         FieldSpec fieldSpec = FieldSpec.builder(String.class, variableName)
                 .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
                 .initializer("$S", variableValue)
                 .build();
         fieldSpecs.add(fieldSpec);
-        return this;
     }
 
     @Override

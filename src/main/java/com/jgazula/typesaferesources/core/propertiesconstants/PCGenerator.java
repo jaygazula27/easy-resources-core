@@ -13,6 +13,10 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Map;
 
+/**
+ * An implementation of {@link PropertiesConstants} which will generate a Java file of constants by parsing
+ * through the given properties files.
+ */
 class PCGenerator implements PropertiesConstants {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PCGenerator.class);
@@ -55,7 +59,7 @@ class PCGenerator implements PropertiesConstants {
             generator.addPublicConstantString(variableName, entry.getValue());
         }
 
-        Path writtenPath = generator.write(fileConfig.propertiesPath());
+        Path writtenPath = generator.write(config.destinationDir());
         LOGGER.debug("Wrote properties to {}", writtenPath);
         LOGGER.info("Finished generating constants for {}", fileConfig.propertiesPath());
     }
