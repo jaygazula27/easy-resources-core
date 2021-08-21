@@ -65,7 +65,13 @@
                     <fork>true</fork>
                     <compilerArgs>
                         <arg>-XDcompilePolicy=simple</arg>
-                        <arg>-Xplugin:ErrorProne -Xep:NullAway:ERROR -XepOpt:NullAway:AnnotatedPackages=com.jgazula -XepDisableWarningsInGeneratedCode -XepExcludedPaths:${project.build.directory}/.*|${project.build.testSourceDirectory}/.*</arg>
+                        <arg>
+                            -Xplugin:ErrorProne \
+                            -Xep:NullAway:ERROR \
+                            -XepOpt:NullAway:AnnotatedPackages=com.jgazula \
+                            -XepDisableWarningsInGeneratedCode \
+                            -XepExcludedPaths:${project.build.directory}/.*|${project.build.testSourceDirectory}/.*
+                        </arg>
                         <arg>-J-Xbootclasspath/p:${settings.localRepository}/com/google/errorprone/javac/${javac.version}/javac-${javac.version}.jar</arg>
                     </compilerArgs>
                     <annotationProcessorPaths>
