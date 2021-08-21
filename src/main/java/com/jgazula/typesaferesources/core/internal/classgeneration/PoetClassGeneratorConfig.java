@@ -7,6 +7,7 @@ import org.immutables.value.Value;
 @Value.Immutable
 public interface PoetClassGeneratorConfig {
 
-    String packageName();
-    String className();
+  String packageName();
+
+  String className();
 }
