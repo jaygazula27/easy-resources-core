@@ -1,5 +1,6 @@
 package com.jgazula.typesaferesources.core.propertiesconstants;
 
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
@@ -13,8 +14,10 @@ import com.jgazula.typesaferesources.core.internal.classgeneration.ClassGenerato
 import com.jgazula.typesaferesources.core.internal.classgeneration.PoetClassGeneratorConfig;
 import com.jgazula.typesaferesources.core.internal.properties.PropertiesParser;
 import com.jgazula.typesaferesources.core.internal.properties.PropertiesReader;
+import com.jgazula.typesaferesources.core.internal.util.FileUtil;
 import com.jgazula.typesaferesources.core.testutil.TestConstants;
 import com.jgazula.typesaferesources.core.testutil.TestHelper;
+import com.jgazula.typesaferesources.core.util.ValidationException;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -36,6 +39,8 @@ public class PCGeneratorTests {
 
   @Mock private PropertiesParser propertiesParser;
 
+  @Mock private FileUtil fileUtil;
+
   @Test
   public void nothingToGenerateWhenNoFileConfigs() throws IOException {
     // given
@@ -43,7 +48,8 @@ public class PCGeneratorTests {
     PCConfig config = PCConfig.builder().destinationDir(destinationDir).build();
 
     // when
-    new PCGenerator(config, generatorFactory, propertiesReader, propertiesParser).generate();
+    new PCGenerator(config, generatorFactory, propertiesReader, propertiesParser, fileUtil)
+        .generate();
 
     // then
     verify(generatorFactory, never()).getGenerator(any(PoetClassGeneratorConfig.class));
@@ -54,6 +60,8 @@ public class PCGeneratorTests {
     // given
     Path propertiesPath = Paths.get(TestConstants.TEST_PROPERTIES_FILE);
     Path destinationDir = Paths.get(TestConstants.DESTINATION_DIR);
+
+    when(fileUtil.exists(propertiesPath)).thenReturn(true);
 
     PCFileConfig fileConfig =
         PCFileConfig.builder()
@@ -75,11 +83,41 @@ public class PCGeneratorTests {
     when(propertiesReader.loadProperties(propertiesPath)).thenReturn(Collections.emptyMap());
 
     // when
-    new PCGenerator(config, generatorFactory, propertiesReader, propertiesParser).generate();
+    new PCGenerator(config, generatorFactory, propertiesReader, propertiesParser, fileUtil)
+        .generate();
 
     // then
     verify(classGenerator, never()).addPublicConstantString(anyString(), anyString());
     verify(classGenerator, never()).write(destinationDir);
+  }
+
+  @Test
+  public void validateNonExistentPropertiesFile() {
+    // given
+    Path propertiesPath = Paths.get(TestConstants.TEST_PROPERTIES_FILE);
+    Path destinationDir = Paths.get(TestConstants.DESTINATION_DIR);
+
+    when(fileUtil.exists(propertiesPath)).thenReturn(false);
+
+    PCFileConfig fileConfig =
+        PCFileConfig.builder()
+            .generatedPackageName(TestConstants.TEST_PACKAGE_NAME)
+            .generatedClassName(TestConstants.TEST_CLASS_NAME)
+            .propertiesPath(propertiesPath)
+            .build();
+
+    PCConfig config =
+        PCConfig.builder()
+            .fileConfigs(Collections.singletonList(fileConfig))
+            .destinationDir(destinationDir)
+            .build();
+
+    // when
+    PropertiesConstants generator =
+        new PCGenerator(config, generatorFactory, propertiesReader, propertiesParser, fileUtil);
+
+    // then
+    assertThatExceptionOfType(ValidationException.class).isThrownBy(generator::generate);
   }
 
   @Test
@@ -88,6 +126,8 @@ public class PCGeneratorTests {
     Path destinationDir = Paths.get(TestConstants.DESTINATION_DIR);
 
     Path propertiesPath = Paths.get(TestConstants.TEST_PROPERTIES_FILE);
+    when(fileUtil.exists(propertiesPath)).thenReturn(true);
+
     Map<String, String> properties = TestHelper.generateProperties();
     PCFileConfig fileConfig =
         PCFileConfig.builder()
@@ -110,7 +150,8 @@ public class PCGeneratorTests {
     when(propertiesParser.keyToStaticFinalVariable(anyString())).thenCallRealMethod();
 
     // when
-    new PCGenerator(config, generatorFactory, propertiesReader, propertiesParser).generate();
+    new PCGenerator(config, generatorFactory, propertiesReader, propertiesParser, fileUtil)
+        .generate();
 
     // then
     verify(propertiesParser, times(properties.size())).keyToStaticFinalVariable(anyString());
@@ -125,6 +166,7 @@ public class PCGeneratorTests {
     Path destinationDir = Paths.get(TestConstants.DESTINATION_DIR);
 
     Path properties1Path = Paths.get(TestConstants.TEST_PROPERTIES_FILE);
+    when(fileUtil.exists(properties1Path)).thenReturn(true);
     Map<String, String> properties1 = TestHelper.generateProperties();
     PCFileConfig fileConfig1 =
         PCFileConfig.builder()
@@ -134,6 +176,7 @@ public class PCGeneratorTests {
             .build();
 
     Path properties2Path = Paths.get(TestConstants.TEST_PROPERTIES_FILE2);
+    when(fileUtil.exists(properties2Path)).thenReturn(true);
     Map<String, String> properties2 = TestHelper.generateProperties();
     PCFileConfig fileConfig2 =
         PCFileConfig.builder()
@@ -143,6 +186,7 @@ public class PCGeneratorTests {
             .build();
 
     Path properties3Path = Paths.get(TestConstants.TEST_PROPERTIES_FILE3);
+    when(fileUtil.exists(properties3Path)).thenReturn(true);
     Map<String, String> properties3 = TestHelper.generateProperties();
     PCFileConfig fileConfig3 =
         PCFileConfig.builder()
@@ -166,7 +210,8 @@ public class PCGeneratorTests {
     when(propertiesParser.keyToStaticFinalVariable(anyString())).thenCallRealMethod();
 
     // when
-    new PCGenerator(config, generatorFactory, propertiesReader, propertiesParser).generate();
+    new PCGenerator(config, generatorFactory, propertiesReader, propertiesParser, fileUtil)
+        .generate();
 
     // then
     int totalNumProperties = properties1.size() + properties2.size() + properties3.size();

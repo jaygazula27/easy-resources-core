@@ -6,6 +6,8 @@ import com.jgazula.typesaferesources.core.internal.classgeneration.ImmutablePoet
 import com.jgazula.typesaferesources.core.internal.classgeneration.PoetClassGeneratorConfig;
 import com.jgazula.typesaferesources.core.internal.properties.PropertiesParser;
 import com.jgazula.typesaferesources.core.internal.properties.PropertiesReader;
+import com.jgazula.typesaferesources.core.internal.util.FileUtil;
+import com.jgazula.typesaferesources.core.util.ValidationException;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Map;
@@ -24,27 +26,40 @@ class PCGenerator implements PropertiesConstants {
   private final ClassGeneratorFactory generatorFactory;
   private final PropertiesReader propertiesReader;
   private final PropertiesParser propertiesParser;
+  private final FileUtil fileUtil;
 
   PCGenerator(
       PCConfig config,
       ClassGeneratorFactory generatorFactory,
       PropertiesReader propertiesReader,
-      PropertiesParser propertiesParser) {
+      PropertiesParser propertiesParser,
+      FileUtil fileUtil) {
     this.config = config;
     this.generatorFactory = generatorFactory;
     this.propertiesReader = propertiesReader;
     this.propertiesParser = propertiesParser;
+    this.fileUtil = fileUtil;
   }
 
   @Override
   public void generate() throws IOException {
+    if (config.fileConfigs().isEmpty()) {
+      LOGGER.warn("No properties files have been configured. Skipping constants file generation.");
+      return;
+    }
+
     for (PCFileConfig fileConfig : config.fileConfigs()) {
       generateFile(fileConfig);
     }
   }
 
   private void generateFile(PCFileConfig fileConfig) throws IOException {
-    LOGGER.info("Generating constants for {}", fileConfig.propertiesPath());
+    LOGGER.debug("Generating constants file for {}", fileConfig.propertiesPath());
+
+    if (!fileUtil.exists(fileConfig.propertiesPath())) {
+      throw new ValidationException(
+          "File %s does not exist", fileConfig.propertiesPath().toString());
+    }
 
     PoetClassGeneratorConfig poetConfig =
         ImmutablePoetClassGeneratorConfig.builder()
@@ -62,17 +77,29 @@ class PCGenerator implements PropertiesConstants {
 
     if (properties.isEmpty()) {
       LOGGER.warn(
-          "The properties file {} is empty. Skipping Java file generation.",
+          "The properties file {} is empty. Skipping constants file generation.",
           fileConfig.propertiesPath());
     } else {
       for (Map.Entry<String, String> entry : properties.entrySet()) {
-        String variableName = propertiesParser.keyToStaticFinalVariable(entry.getKey());
-        generator.addPublicConstantString(variableName, entry.getValue());
+        try {
+          String variableName = propertiesParser.keyToStaticFinalVariable(entry.getKey());
+          generator.addPublicConstantString(variableName, entry.getValue());
+        } catch (IllegalArgumentException e) {
+          LOGGER.debug(
+              "Unable to parse or generate variable for key {} in file {}",
+              entry.getKey(),
+              fileConfig.propertiesPath().toFile(),
+              e);
+
+          throw new ValidationException(
+              "Invalid property key %s in file %s",
+              entry.getKey(), fileConfig.propertiesPath().toString());
+        }
       }
 
       Path writtenPath = generator.write(config.destinationDir());
       LOGGER.debug("Wrote properties to {}", writtenPath);
-      LOGGER.info("Finished generating constants for {}", fileConfig.propertiesPath());
+      LOGGER.info("Generated constants file for {}", fileConfig.propertiesPath());
     }
   }
 }

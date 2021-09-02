@@ -3,6 +3,7 @@ package com.jgazula.typesaferesources.core.propertiesconstants;
 import com.jgazula.typesaferesources.core.internal.classgeneration.ClassGeneratorFactory;
 import com.jgazula.typesaferesources.core.internal.properties.PropertiesParser;
 import com.jgazula.typesaferesources.core.internal.properties.PropertiesReader;
+import com.jgazula.typesaferesources.core.internal.util.FileUtil;
 import java.io.IOException;
 import java.util.Objects;
 
@@ -20,6 +21,10 @@ public interface PropertiesConstants {
     Objects.requireNonNull(
         config, "config cannot be null when creating a PropertiesConstants instance.");
     return new PCGenerator(
-        config, new ClassGeneratorFactory(), new PropertiesReader(), new PropertiesParser());
+        config,
+        new ClassGeneratorFactory(),
+        new PropertiesReader(),
+        new PropertiesParser(),
+        new FileUtil());
   }
 }
