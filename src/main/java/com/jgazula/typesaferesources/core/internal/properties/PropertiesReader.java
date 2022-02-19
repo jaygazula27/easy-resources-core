@@ -8,8 +8,10 @@ import java.nio.file.Path;
 import java.util.Map;
 import java.util.Properties;
 
+/** A helper class used for reading a properties file. */
 public class PropertiesReader {
 
+  /** Reads and loads the given properties file. */
   public Map<String, String> loadProperties(Path path) throws IOException {
     try (BufferedReader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {
       Properties properties = new Properties();

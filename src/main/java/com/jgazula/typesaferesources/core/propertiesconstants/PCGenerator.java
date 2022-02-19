@@ -83,7 +83,7 @@ class PCGenerator implements PropertiesConstants {
       for (Map.Entry<String, String> entry : properties.entrySet()) {
         try {
           String variableName = propertiesParser.keyToStaticFinalVariable(entry.getKey());
-          generator.addPublicConstantString(variableName, entry.getValue());
+          generator.addPublicConstantString(variableName, entry.getKey());
         } catch (IllegalArgumentException e) {
           LOGGER.debug(
               "Unable to parse or generate variable for key {} in file {}",

@@ -1,6 +1,7 @@
 package com.jgazula.typesaferesources.core.internal.util;
 
 import java.nio.file.Files;
+import java.nio.file.LinkOption;
 import java.nio.file.Path;
 
 /**
@@ -9,6 +10,7 @@ import java.nio.file.Path;
  */
 public class FileUtil {
 
+  /** Same as {@link Files#exists(Path, LinkOption...)}. */
   public boolean exists(Path path) {
     return Files.exists(path);
   }
