@@ -21,7 +21,7 @@ public class PropertiesParser {
     if (tokens.length == 1) {
       return tokens[0].toUpperCase();
     } else {
-      StringBuilder sb = new StringBuilder();
+      var sb = new StringBuilder();
       for (int i = 0; i < tokens.length; i++) {
         sb.append(tokens[i].toUpperCase());
         if ((i + 1) != tokens.length) {

@@ -3,7 +3,6 @@ package com.jgazula.typesaferesources.core.propertiesconstants;
 import com.jgazula.typesaferesources.core.internal.classgeneration.ClassGenerator;
 import com.jgazula.typesaferesources.core.internal.classgeneration.ClassGeneratorFactory;
 import com.jgazula.typesaferesources.core.internal.classgeneration.ImmutablePoetClassGeneratorConfig;
-import com.jgazula.typesaferesources.core.internal.classgeneration.PoetClassGeneratorConfig;
 import com.jgazula.typesaferesources.core.internal.properties.PropertiesParser;
 import com.jgazula.typesaferesources.core.internal.properties.PropertiesReader;
 import com.jgazula.typesaferesources.core.internal.util.FileUtil;
@@ -61,7 +60,7 @@ class PCGenerator implements PropertiesConstants {
           "File %s does not exist", fileConfig.propertiesPath().toString());
     }
 
-    PoetClassGeneratorConfig poetConfig =
+    var poetConfig =
         ImmutablePoetClassGeneratorConfig.builder()
             .packageName(fileConfig.generatedPackageName())
             .className(fileConfig.generatedClassName())

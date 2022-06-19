@@ -27,7 +27,7 @@ public class PoetClassGenerator implements ClassGenerator {
 
   @Override
   public void addPublicConstantString(String variableName, String variableValue) {
-    FieldSpec fieldSpec =
+    var fieldSpec =
         FieldSpec.builder(String.class, variableName)
             .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
             .initializer("$S", variableValue)
@@ -37,7 +37,7 @@ public class PoetClassGenerator implements ClassGenerator {
 
   @Override
   public Path write(Path directory) throws IOException {
-    TypeSpec typeSpec =
+    var typeSpec =
         TypeSpec.classBuilder(config.className())
             .addModifiers(Modifier.PUBLIC)
             .addFields(fieldSpecs)

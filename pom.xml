@@ -73,9 +73,6 @@
               -XepDisableWarningsInGeneratedCode \
               -XepExcludedPaths:${project.build.directory}/.*|${project.build.testSourceDirectory}/.*
             </arg>
-            <arg>
-              -J-Xbootclasspath/p:${settings.localRepository}/com/google/errorprone/javac/${javac.version}/javac-${javac.version}.jar
-            </arg>
           </compilerArgs>
           <annotationProcessorPaths>
             <path>
@@ -127,10 +124,7 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <java.version>1.8</java.version>
-    <maven.compiler.source>${java.version}</maven.compiler.source>
-    <maven.compiler.target>${java.version}</maven.compiler.target>
+    <maven.compiler.release>11</maven.compiler.release>
     <immutables.version>2.9.0</immutables.version>
-    <javac.version>9+181-r4173-1</javac.version>
   </properties>
 </project>
