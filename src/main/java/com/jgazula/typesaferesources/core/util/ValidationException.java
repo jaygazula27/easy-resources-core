@@ -1,9 +1,11 @@
 package com.jgazula.typesaferesources.core.util;
 
-/** This exception indicates a validation failure. */
+/**
+ * This exception indicates a validation failure.
+ */
 public class ValidationException extends RuntimeException {
 
-  public ValidationException(String message, String... args) {
-    super(String.format(message, (Object[]) args));
-  }
+    public ValidationException(String message, String... args) {
+        super(String.format(message, (Object[]) args));
+    }
 }

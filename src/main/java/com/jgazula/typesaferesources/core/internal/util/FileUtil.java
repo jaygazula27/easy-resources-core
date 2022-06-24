@@ -10,8 +10,10 @@ import java.nio.file.Path;
  */
 public class FileUtil {
 
-  /** Same as {@link Files#exists(Path, LinkOption...)}. */
-  public boolean exists(Path path) {
-    return Files.exists(path);
-  }
+    /**
+     * Same as {@link Files#exists(Path, LinkOption...)}.
+     */
+    public boolean exists(Path path) {
+        return Files.exists(path);
+    }
 }

@@ -9,4 +9,4 @@ import org.immutables.value.Value;
 @Target({ElementType.PACKAGE, ElementType.TYPE})
 @Retention(RetentionPolicy.CLASS)
 @Value.Style(jdkOnly = true, depluralize = true)
-public @interface ImmutableStyle {}
+public @interface ImmutableStyle { }

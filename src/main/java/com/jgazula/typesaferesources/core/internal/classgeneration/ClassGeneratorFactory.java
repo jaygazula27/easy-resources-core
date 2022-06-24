@@ -6,11 +6,11 @@ package com.jgazula.typesaferesources.core.internal.classgeneration;
  */
 public class ClassGeneratorFactory {
 
-  /**
-   * Returns a {@link ClassGenerator} instance backed by the {@link PoetClassGenerator}
-   * implementation.
-   */
-  public ClassGenerator getGenerator(PoetClassGeneratorConfig config) {
-    return new PoetClassGenerator(config);
-  }
+    /**
+     * Returns a {@link ClassGenerator} instance backed by the {@link PoetClassGenerator}
+     * implementation.
+     */
+    public ClassGenerator getGenerator(PoetClassGeneratorConfig config) {
+        return new PoetClassGenerator(config);
+    }
 }

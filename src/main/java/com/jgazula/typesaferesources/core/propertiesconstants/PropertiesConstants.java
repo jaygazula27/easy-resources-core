@@ -4,6 +4,7 @@ import com.jgazula.typesaferesources.core.internal.classgeneration.ClassGenerato
 import com.jgazula.typesaferesources.core.internal.properties.PropertiesParser;
 import com.jgazula.typesaferesources.core.internal.properties.PropertiesReader;
 import com.jgazula.typesaferesources.core.internal.util.FileUtil;
+
 import java.io.IOException;
 import java.util.Objects;
 
@@ -13,18 +14,17 @@ import java.util.Objects;
  */
 public interface PropertiesConstants {
 
-  /** Generates the Java file with the appropriate constants. */
-  void generate() throws IOException;
+    /**
+     * Generates the Java file with the appropriate constants.
+     */
+    void generate() throws IOException;
 
-  /** Creates an implementation of this interface. */
-  static PropertiesConstants create(PCConfig config) {
-    Objects.requireNonNull(
-        config, "config cannot be null when creating a PropertiesConstants instance.");
-    return new PCGenerator(
-        config,
-        new ClassGeneratorFactory(),
-        new PropertiesReader(),
-        new PropertiesParser(),
-        new FileUtil());
-  }
+    /**
+     * Creates an implementation of this interface.
+     */
+    static PropertiesConstants create(PCConfig config) {
+        Objects.requireNonNull(config, "config cannot be null when creating a PropertiesConstants instance.");
+        return new PCGenerator(config, new ClassGeneratorFactory(), new PropertiesReader(), new PropertiesParser(),
+                new FileUtil());
+    }
 }
