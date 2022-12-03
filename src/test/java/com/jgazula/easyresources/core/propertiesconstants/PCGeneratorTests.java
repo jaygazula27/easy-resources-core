@@ -51,7 +51,7 @@ public class PCGeneratorTests {
     public void nothingToGenerateWhenNoFileConfigs() throws IOException {
         // given
         Path destinationDir = Paths.get(TestConstants.DESTINATION_DIR);
-        PCConfig config = PCConfig.builder().destinationDir(destinationDir).build();
+        PropertiesConstantsConfig config = PropertiesConstantsConfig.builder().destinationDir(destinationDir).build();
 
         // when
         new PCGenerator(config, generatorFactory, propertiesReader, propertiesParser, fileUtil).generate();
@@ -68,13 +68,13 @@ public class PCGeneratorTests {
 
         when(fileUtil.exists(propertiesPath)).thenReturn(true);
 
-        PCFileConfig fileConfig = PCFileConfig.builder()
+        PropertiesConstantsFileConfig fileConfig = PropertiesConstantsFileConfig.builder()
                 .generatedPackageName(TestConstants.TEST_PACKAGE_NAME)
                 .generatedClassName(TestConstants.TEST_CLASS_NAME)
                 .propertiesPath(propertiesPath)
                 .build();
 
-        PCConfig config = PCConfig.builder()
+        PropertiesConstantsConfig config = PropertiesConstantsConfig.builder()
                 .fileConfigs(Collections.singletonList(fileConfig))
                 .destinationDir(destinationDir)
                 .build();
@@ -102,13 +102,13 @@ public class PCGeneratorTests {
 
         when(fileUtil.exists(propertiesPath)).thenReturn(false);
 
-        PCFileConfig fileConfig = PCFileConfig.builder()
+        PropertiesConstantsFileConfig fileConfig = PropertiesConstantsFileConfig.builder()
                 .generatedPackageName(TestConstants.TEST_PACKAGE_NAME)
                 .generatedClassName(TestConstants.TEST_CLASS_NAME)
                 .propertiesPath(propertiesPath)
                 .build();
 
-        PCConfig config = PCConfig.builder()
+        PropertiesConstantsConfig config = PropertiesConstantsConfig.builder()
                 .fileConfigs(Collections.singletonList(fileConfig))
                 .destinationDir(destinationDir)
                 .build();
@@ -130,13 +130,13 @@ public class PCGeneratorTests {
         when(fileUtil.exists(propertiesPath)).thenReturn(true);
 
         Map<String, String> properties = TestHelper.generateProperties();
-        PCFileConfig fileConfig = PCFileConfig.builder()
+        PropertiesConstantsFileConfig fileConfig = PropertiesConstantsFileConfig.builder()
                 .generatedPackageName(TestConstants.TEST_PACKAGE_NAME)
                 .generatedClassName(TestConstants.TEST_CLASS_NAME)
                 .propertiesPath(propertiesPath)
                 .build();
 
-        PCConfig config = PCConfig.builder()
+        PropertiesConstantsConfig config = PropertiesConstantsConfig.builder()
                 .fileConfigs(Collections.singletonList(fileConfig))
                 .destinationDir(destinationDir)
                 .build();
@@ -165,7 +165,7 @@ public class PCGeneratorTests {
         Path properties1Path = Paths.get(TestConstants.TEST_PROPERTIES_FILE);
         when(fileUtil.exists(properties1Path)).thenReturn(true);
         Map<String, String> properties1 = TestHelper.generateProperties();
-        PCFileConfig fileConfig1 = PCFileConfig.builder()
+        PropertiesConstantsFileConfig fileConfig1 = PropertiesConstantsFileConfig.builder()
                 .generatedPackageName(TestConstants.TEST_PACKAGE_NAME)
                 .generatedClassName(TestConstants.TEST_CLASS_NAME)
                 .propertiesPath(properties1Path)
@@ -174,7 +174,7 @@ public class PCGeneratorTests {
         Path properties2Path = Paths.get(TestConstants.TEST_PROPERTIES_FILE2);
         when(fileUtil.exists(properties2Path)).thenReturn(true);
         Map<String, String> properties2 = TestHelper.generateProperties();
-        PCFileConfig fileConfig2 = PCFileConfig.builder()
+        PropertiesConstantsFileConfig fileConfig2 = PropertiesConstantsFileConfig.builder()
                 .generatedPackageName(TestConstants.TEST_PACKAGE_NAME2)
                 .generatedClassName(TestConstants.TEST_CLASS_NAME2)
                 .propertiesPath(properties2Path)
@@ -183,14 +183,16 @@ public class PCGeneratorTests {
         Path properties3Path = Paths.get(TestConstants.TEST_PROPERTIES_FILE3);
         when(fileUtil.exists(properties3Path)).thenReturn(true);
         Map<String, String> properties3 = TestHelper.generateProperties();
-        PCFileConfig fileConfig3 = PCFileConfig.builder()
+        PropertiesConstantsFileConfig fileConfig3 = PropertiesConstantsFileConfig.builder()
                 .generatedPackageName(TestConstants.TEST_PACKAGE_NAME3)
                 .generatedClassName(TestConstants.TEST_CLASS_NAME3)
                 .propertiesPath(properties3Path)
                 .build();
 
-        List<PCFileConfig> fileConfigs = Arrays.asList(fileConfig1, fileConfig2, fileConfig3);
-        PCConfig config = PCConfig.builder().fileConfigs(fileConfigs).destinationDir(destinationDir).build();
+        List<PropertiesConstantsFileConfig> fileConfigs = Arrays.asList(fileConfig1, fileConfig2, fileConfig3);
+        PropertiesConstantsConfig config = PropertiesConstantsConfig.builder()
+                .fileConfigs(fileConfigs)
+                .destinationDir(destinationDir).build();
 
         ClassGenerator classGenerator = mock(ClassGenerator.class);
         when(generatorFactory.getGenerator(any(PoetClassGeneratorConfig.class))).thenReturn(classGenerator);

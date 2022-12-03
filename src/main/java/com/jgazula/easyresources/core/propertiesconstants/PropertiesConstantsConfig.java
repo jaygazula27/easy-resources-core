@@ -9,22 +9,22 @@ import org.immutables.value.Value;
 
 @ImmutableStyle
 @Value.Immutable
-public interface PCConfig {
+public interface PropertiesConstantsConfig {
 
-    List<PCFileConfig> fileConfigs();
+    List<PropertiesConstantsFileConfig> fileConfigs();
 
     Path destinationDir();
 
     static Builder builder() {
-        return ImmutablePCConfig.builder();
+        return ImmutablePropertiesConstantsConfig.builder();
     }
 
     interface Builder {
 
-        Builder fileConfigs(Iterable<? extends PCFileConfig> elements);
+        Builder fileConfigs(Iterable<? extends PropertiesConstantsFileConfig> elements);
 
         Builder destinationDir(Path path);
 
-        PCConfig build();
+        PropertiesConstantsConfig build();
     }
 }

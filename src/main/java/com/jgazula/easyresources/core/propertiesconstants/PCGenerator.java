@@ -23,14 +23,14 @@ class PCGenerator implements PropertiesConstants {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PCGenerator.class);
 
-    private final PCConfig config;
+    private final PropertiesConstantsConfig config;
     private final ClassGeneratorFactory generatorFactory;
     private final PropertiesReader propertiesReader;
     private final PropertiesParser propertiesParser;
     private final FileUtil fileUtil;
 
-    PCGenerator(PCConfig config, ClassGeneratorFactory generatorFactory, PropertiesReader propertiesReader,
-                PropertiesParser propertiesParser, FileUtil fileUtil) {
+    PCGenerator(PropertiesConstantsConfig config, ClassGeneratorFactory generatorFactory,
+                PropertiesReader propertiesReader, PropertiesParser propertiesParser, FileUtil fileUtil) {
         this.config = config;
         this.generatorFactory = generatorFactory;
         this.propertiesReader = propertiesReader;
@@ -45,12 +45,12 @@ class PCGenerator implements PropertiesConstants {
             return;
         }
 
-        for (PCFileConfig fileConfig : config.fileConfigs()) {
+        for (PropertiesConstantsFileConfig fileConfig : config.fileConfigs()) {
             generateFile(fileConfig);
         }
     }
 
-    private void generateFile(PCFileConfig fileConfig) throws IOException {
+    private void generateFile(PropertiesConstantsFileConfig fileConfig) throws IOException {
         LOGGER.debug("Generating constants file for {}", fileConfig.propertiesPath());
 
         if (!fileUtil.exists(fileConfig.propertiesPath())) {

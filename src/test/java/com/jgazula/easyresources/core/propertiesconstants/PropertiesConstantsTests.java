@@ -20,13 +20,13 @@ public class PropertiesConstantsTests {
     @Test
     public void createNewInstance() {
         // given
-        PCFileConfig fileConfig = PCFileConfig.builder()
+        PropertiesConstantsFileConfig fileConfig = PropertiesConstantsFileConfig.builder()
                 .generatedPackageName(TestConstants.TEST_PACKAGE_NAME)
                 .generatedClassName(TestConstants.TEST_CLASS_NAME)
                 .propertiesPath(Paths.get(TestConstants.TEST_PROPERTIES_FILE))
                 .build();
 
-        PCConfig config = PCConfig.builder()
+        PropertiesConstantsConfig config = PropertiesConstantsConfig.builder()
                 .fileConfigs(Collections.singletonList(fileConfig))
                 .destinationDir(Paths.get(TestConstants.DESTINATION_DIR))
                 .build();

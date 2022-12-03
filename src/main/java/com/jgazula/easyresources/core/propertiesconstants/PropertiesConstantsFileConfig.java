@@ -8,7 +8,7 @@ import org.immutables.value.Value;
 
 @ImmutableStyle
 @Value.Immutable
-public interface PCFileConfig {
+public interface PropertiesConstantsFileConfig {
 
     Path propertiesPath();
 
@@ -26,7 +26,7 @@ public interface PCFileConfig {
     }
 
     static Builder builder() {
-        return ImmutablePCFileConfig.builder();
+        return ImmutablePropertiesConstantsFileConfig.builder();
     }
 
     interface Builder {
@@ -37,6 +37,6 @@ public interface PCFileConfig {
 
         Builder generatedPackageName(String generatedPackageName);
 
-        PCFileConfig build();
+        PropertiesConstantsFileConfig build();
     }
 }

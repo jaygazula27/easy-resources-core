@@ -22,7 +22,7 @@ public interface PropertiesConstants {
     /**
      * Creates an implementation of this interface.
      */
-    static PropertiesConstants create(PCConfig config) {
+    static PropertiesConstants create(PropertiesConstantsConfig config) {
         Objects.requireNonNull(config, "config cannot be null when creating a PropertiesConstants instance.");
         return new PCGenerator(config, new ClassGeneratorFactory(), new PropertiesReader(), new PropertiesParser(),
                 new FileUtil());
