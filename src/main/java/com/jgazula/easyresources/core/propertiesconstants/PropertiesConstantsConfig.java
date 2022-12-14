@@ -11,6 +11,8 @@ import org.immutables.value.Value;
 @Value.Immutable
 public interface PropertiesConstantsConfig {
 
+    String generatedBy();
+
     List<PropertiesConstantsFileConfig> fileConfigs();
 
     Path destinationDir();
@@ -20,6 +22,8 @@ public interface PropertiesConstantsConfig {
     }
 
     interface Builder {
+
+        Builder generatedBy(String pluginName);
 
         Builder fileConfigs(Iterable<? extends PropertiesConstantsFileConfig> elements);
 

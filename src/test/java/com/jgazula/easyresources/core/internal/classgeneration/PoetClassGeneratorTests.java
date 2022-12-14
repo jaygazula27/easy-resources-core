@@ -29,6 +29,7 @@ public class PoetClassGeneratorTests {
     public void classIsGenerated() throws IOException {
         // given
         ImmutablePoetClassGeneratorConfig config = ImmutablePoetClassGeneratorConfig.builder()
+                .generatedBy(TestConstants.TEST_PLUGIN_NAME)
                 .packageName(TestConstants.TEST_PACKAGE_NAME)
                 .className(TestConstants.TEST_CLASS_NAME)
                 .build();
@@ -45,6 +46,7 @@ public class PoetClassGeneratorTests {
     public void packageNameAndClassNameIsCorrect() throws IOException {
         // given
         ImmutablePoetClassGeneratorConfig config = ImmutablePoetClassGeneratorConfig.builder()
+                .generatedBy(TestConstants.TEST_PLUGIN_NAME)
                 .packageName(TestConstants.TEST_PACKAGE_NAME)
                 .className(TestConstants.TEST_CLASS_NAME)
                 .build();
@@ -63,6 +65,7 @@ public class PoetClassGeneratorTests {
     public void publicConstantStringsAreAdded() throws IOException {
         // given
         ImmutablePoetClassGeneratorConfig config = ImmutablePoetClassGeneratorConfig.builder()
+                .generatedBy(TestConstants.TEST_PLUGIN_NAME)
                 .packageName(TestConstants.TEST_PACKAGE_NAME)
                 .className(TestConstants.TEST_CLASS_NAME)
                 .build();

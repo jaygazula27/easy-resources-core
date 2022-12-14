@@ -58,6 +58,7 @@ class PCGenerator implements PropertiesConstants {
         }
 
         var poetConfig = ImmutablePoetClassGeneratorConfig.builder()
+                .generatedBy(config.generatedBy())
                 .packageName(fileConfig.generatedPackageName())
                 .className(fileConfig.generatedClassName())
                 .build();

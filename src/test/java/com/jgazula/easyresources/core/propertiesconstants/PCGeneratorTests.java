@@ -51,7 +51,10 @@ public class PCGeneratorTests {
     public void nothingToGenerateWhenNoFileConfigs() throws IOException {
         // given
         Path destinationDir = Paths.get(TestConstants.DESTINATION_DIR);
-        PropertiesConstantsConfig config = PropertiesConstantsConfig.builder().destinationDir(destinationDir).build();
+        PropertiesConstantsConfig config = PropertiesConstantsConfig.builder()
+                .generatedBy(TestConstants.TEST_PLUGIN_NAME)
+                .destinationDir(destinationDir)
+                .build();
 
         // when
         new PCGenerator(config, generatorFactory, propertiesReader, propertiesParser, fileUtil).generate();
@@ -75,6 +78,7 @@ public class PCGeneratorTests {
                 .build();
 
         PropertiesConstantsConfig config = PropertiesConstantsConfig.builder()
+                .generatedBy(TestConstants.TEST_PLUGIN_NAME)
                 .fileConfigs(Collections.singletonList(fileConfig))
                 .destinationDir(destinationDir)
                 .build();
@@ -109,6 +113,7 @@ public class PCGeneratorTests {
                 .build();
 
         PropertiesConstantsConfig config = PropertiesConstantsConfig.builder()
+                .generatedBy(TestConstants.TEST_PLUGIN_NAME)
                 .fileConfigs(Collections.singletonList(fileConfig))
                 .destinationDir(destinationDir)
                 .build();
@@ -137,6 +142,7 @@ public class PCGeneratorTests {
                 .build();
 
         PropertiesConstantsConfig config = PropertiesConstantsConfig.builder()
+                .generatedBy(TestConstants.TEST_PLUGIN_NAME)
                 .fileConfigs(Collections.singletonList(fileConfig))
                 .destinationDir(destinationDir)
                 .build();
@@ -191,6 +197,7 @@ public class PCGeneratorTests {
 
         List<PropertiesConstantsFileConfig> fileConfigs = Arrays.asList(fileConfig1, fileConfig2, fileConfig3);
         PropertiesConstantsConfig config = PropertiesConstantsConfig.builder()
+                .generatedBy(TestConstants.TEST_PLUGIN_NAME)
                 .fileConfigs(fileConfigs)
                 .destinationDir(destinationDir).build();
 

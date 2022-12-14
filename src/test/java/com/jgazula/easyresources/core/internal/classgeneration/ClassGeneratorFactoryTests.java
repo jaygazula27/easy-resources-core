@@ -11,6 +11,7 @@ public class ClassGeneratorFactoryTests {
     public void poetGeneratorInstanceIsCreated() {
         // given
         PoetClassGeneratorConfig config = ImmutablePoetClassGeneratorConfig.builder()
+                .generatedBy(TestConstants.TEST_PLUGIN_NAME)
                 .packageName(TestConstants.TEST_PACKAGE_NAME)
                 .className(TestConstants.TEST_CLASS_NAME)
                 .build();

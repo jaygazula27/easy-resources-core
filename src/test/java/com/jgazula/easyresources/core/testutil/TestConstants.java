@@ -2,6 +2,8 @@ package com.jgazula.easyresources.core.testutil;
 
 public class TestConstants {
 
+    public static final String TEST_PLUGIN_NAME = "easy-resources-maven-plugin";
+
     public static final String TEST_PACKAGE_NAME = "com.jgazula.test";
     public static final String TEST_PACKAGE_NAME2 = "com.jgazula.test2";
     public static final String TEST_PACKAGE_NAME3 = "com.jgazula.test3";

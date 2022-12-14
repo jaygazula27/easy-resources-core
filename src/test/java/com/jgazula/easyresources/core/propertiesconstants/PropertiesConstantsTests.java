@@ -27,6 +27,7 @@ public class PropertiesConstantsTests {
                 .build();
 
         PropertiesConstantsConfig config = PropertiesConstantsConfig.builder()
+                .generatedBy(TestConstants.TEST_PLUGIN_NAME)
                 .fileConfigs(Collections.singletonList(fileConfig))
                 .destinationDir(Paths.get(TestConstants.DESTINATION_DIR))
                 .build();
