@@ -4,8 +4,8 @@
 ## Overview
 
 This repository contains the core parsing and class generation logic of 
-[easy-resources-maven-plugin](https://github.com/jaygazula27/easy-resources-maven-plugin) and 
-[easy-resources-gradle-plugin](https://github.com/jaygazula27/easy-resources-gradle-plugin). 
+the [easy-resources-maven-plugin](https://github.com/jaygazula27/easy-resources-maven-plugin) and 
+the [easy-resources-gradle-plugin](https://github.com/jaygazula27/easy-resources-gradle-plugin). 
 For information on how to use these plugins, please view the corresponding repositories.
 
 The goal of this project is to enable easy and typesafe access to resources such as properties files, i18n bundles, etc.
