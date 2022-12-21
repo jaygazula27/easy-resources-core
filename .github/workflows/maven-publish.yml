@@ -12,11 +12,9 @@ on:
         type: string
 
 jobs:
-  build:
+  publish:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
+    environment: production
 
     steps:
       - uses: actions/checkout@v3
