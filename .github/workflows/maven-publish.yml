@@ -20,7 +20,9 @@ jobs:
       - uses: actions/checkout@v3
 
       - name: Print the next development version
-        run: echo "Next development version - ${developmentVersion}"
+        run: echo "Next development version - ${DEVELOPMENT_VERSION}"
+        env:
+          DEVELOPMENT_VERSION: ${{ inputs.developmentVersion }}
 
       - name: Configure Git user
         run: |
@@ -40,8 +42,9 @@ jobs:
           gpg-passphrase: MAVEN_GPG_PASSPHRASE
 
       - name: Build and deploy with Maven
-        run: mvn -B -Prelease release:clean release:prepare release:perform -DdevelopmentVersion=${developmentVersion}
+        run: mvn -B -Prelease release:clean release:prepare release:perform -DdevelopmentVersion=${DEVELOPMENT_VERSION}
         env:
           MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
           MAVEN_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
           MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
+          DEVELOPMENT_VERSION: ${{ inputs.developmentVersion }}
