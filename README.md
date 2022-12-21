@@ -19,7 +19,8 @@ The goal of this project is to enable easy and typesafe access to resources such
 
 * Requires Java 11 and Maven 3.
 * To build the project (and run unit tests): `mvn -U clean install`
-* Use the [Publish to Maven Central](https://github.com/jaygazula27/easy-resources-core/actions/workflows/maven-publish.yml) workflow to deploy to maven central. 
+* Use the [Publish to Maven Central](https://github.com/jaygazula27/easy-resources-core/actions/workflows/maven-publish.yml) workflow to deploy to maven central.
+  * Needs the following secrets: `OSSRH_USERNAME`, `OSSRH_PASSWORD`, `MAVEN_GPG_PASSPHRASE`, `MAVEN_GPG_PRIVATE_KEY`
 
 
 ## License
