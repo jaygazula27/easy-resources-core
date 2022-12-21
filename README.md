@@ -1,4 +1,8 @@
-# easy-resources-core
+# easy-resources-core 
+
+![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/jaygazula27/easy-resources-core/maven-build.yml)
+![Maven Central](https://img.shields.io/maven-central/v/com.jgazula/easy-resources-core)
+![GitHub](https://img.shields.io/github/license/jaygazula27/easy-resources-core)
 
 
 ## Overview
@@ -15,6 +19,7 @@ The goal of this project is to enable easy and typesafe access to resources such
 
 * Requires Java 11 and Maven 3.
 * To build the project (and run unit tests): `mvn -U clean install`
+* Use the [Publish to Maven Central](https://github.com/jaygazula27/easy-resources-core/actions/workflows/maven-publish.yml) workflow to deploy to maven central. 
 
 
 ## License

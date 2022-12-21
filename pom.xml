@@ -109,7 +109,7 @@
 
     <profiles>
         <profile>
-            <id>${profile.release}</id>
+            <id>release</id>
             <build>
                 <plugins>
                     <!-- The following plugins are necessary for deploying to maven central -->
@@ -178,7 +178,7 @@
                         <configuration>
                             <tagNameFormat>v@{project.version}</tagNameFormat>
                             <autoVersionSubmodules>true</autoVersionSubmodules>
-                            <releaseProfiles>${profile.release}</releaseProfiles>
+                            <releaseProfiles>release</releaseProfiles>
                         </configuration>
                     </plugin>
                 </plugins>
@@ -217,6 +217,5 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.release>11</maven.compiler.release>
         <immutables.version>2.9.2</immutables.version>
-        <profile.release>release</profile.release>
     </properties>
 </project>

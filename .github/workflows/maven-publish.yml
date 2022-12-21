@@ -32,7 +32,7 @@ jobs:
           gpg-private-key: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
 
       - name: Build and deploy with Maven
-        run: mvn -B release:clean release:prepare release:perform -DdevelopmentVersion=${developmentVersion}
+        run: mvn -B -Prelease release:clean release:prepare release:perform -DdevelopmentVersion=${developmentVersion}
         env:
           MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
           MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
