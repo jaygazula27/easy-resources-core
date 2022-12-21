@@ -201,8 +201,8 @@
     </developers>
 
     <scm>
-        <connection>scm:git:git://github.com/jaygazula27/easy-resources-core.git</connection>
-        <developerConnection>scm:git:ssh://github.com:jaygazula27/easy-resources-core.git</developerConnection>
+        <connection>scm:git:ssh://git@github.com:jaygazula27/easy-resources-core.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com:jaygazula27/easy-resources-core.git</developerConnection>
         <url>https://github.com/jaygazula27/easy-resources-core</url>
     </scm>
 
