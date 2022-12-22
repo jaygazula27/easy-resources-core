@@ -20,7 +20,7 @@ jobs:
       - uses: actions/checkout@v3
 
       - name: Print the next development version
-        run: echo "Next development version - ${DEVELOPMENT_VERSION}"
+        run: echo "${DEVELOPMENT_VERSION}"
         env:
           DEVELOPMENT_VERSION: ${{ inputs.developmentVersion }}
 
@@ -48,3 +48,4 @@ jobs:
           MAVEN_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
           MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
           DEVELOPMENT_VERSION: ${{ inputs.developmentVersion }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
