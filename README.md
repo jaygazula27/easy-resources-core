@@ -1,8 +1,8 @@
 # easy-resources-core 
 
-![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/jaygazula27/easy-resources-core/maven-build.yml)
-![Maven Central](https://img.shields.io/maven-central/v/com.jgazula/easy-resources-core)
-![GitHub](https://img.shields.io/github/license/jaygazula27/easy-resources-core)
+[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/jaygazula27/easy-resources-core/maven-build.yml)](https://github.com/jaygazula27/easy-resources-core/actions/workflows/maven-build.yml)
+[![Maven Central](https://img.shields.io/maven-central/v/com.jgazula/easy-resources-core)](https://search.maven.org/artifact/com.jgazula/easy-resources-core)
+[![GitHub](https://img.shields.io/github/license/jaygazula27/easy-resources-core)](LICENSE)
 
 
 ## Overview
