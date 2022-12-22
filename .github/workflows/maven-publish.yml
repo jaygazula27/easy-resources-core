@@ -3,6 +3,8 @@
 
 name: Publish to Maven Central
 
+run-name: Publish to Maven Central and switch over to ${{ inputs.developmentVersion }}
+
 on:
   workflow_dispatch:
     inputs:
