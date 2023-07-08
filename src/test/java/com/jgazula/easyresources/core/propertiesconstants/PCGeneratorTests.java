@@ -10,8 +10,8 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.jgazula.easyresources.core.internal.classgeneration.ClassGenerator;
+import com.jgazula.easyresources.core.internal.classgeneration.ClassGeneratorConfig;
 import com.jgazula.easyresources.core.internal.classgeneration.ClassGeneratorFactory;
-import com.jgazula.easyresources.core.internal.classgeneration.PoetClassGeneratorConfig;
 import com.jgazula.easyresources.core.internal.properties.PropertiesParser;
 import com.jgazula.easyresources.core.internal.properties.PropertiesReader;
 import com.jgazula.easyresources.core.internal.util.FileUtil;
@@ -60,7 +60,7 @@ public class PCGeneratorTests {
         new PCGenerator(config, generatorFactory, propertiesReader, propertiesParser, fileUtil).generate();
 
         // then
-        verify(generatorFactory, never()).getGenerator(any(PoetClassGeneratorConfig.class));
+        verify(generatorFactory, never()).getGenerator(any(ClassGeneratorConfig.class));
     }
 
     @Test
@@ -84,7 +84,7 @@ public class PCGeneratorTests {
                 .build();
 
         ClassGenerator classGenerator = mock(ClassGenerator.class);
-        when(generatorFactory.getGenerator(any(PoetClassGeneratorConfig.class)))
+        when(generatorFactory.getGenerator(any(ClassGeneratorConfig.class)))
                 .thenReturn(classGenerator);
 
         when(propertiesReader.loadProperties(propertiesPath)).thenReturn(Collections.emptyMap());
@@ -148,7 +148,7 @@ public class PCGeneratorTests {
                 .build();
 
         ClassGenerator classGenerator = mock(ClassGenerator.class);
-        when(generatorFactory.getGenerator(any(PoetClassGeneratorConfig.class)))
+        when(generatorFactory.getGenerator(any(ClassGeneratorConfig.class)))
                 .thenReturn(classGenerator);
 
         when(propertiesReader.loadProperties(propertiesPath)).thenReturn(properties);
@@ -202,7 +202,7 @@ public class PCGeneratorTests {
                 .destinationDir(destinationDir).build();
 
         ClassGenerator classGenerator = mock(ClassGenerator.class);
-        when(generatorFactory.getGenerator(any(PoetClassGeneratorConfig.class))).thenReturn(classGenerator);
+        when(generatorFactory.getGenerator(any(ClassGeneratorConfig.class))).thenReturn(classGenerator);
 
         when(propertiesReader.loadProperties(properties1Path)).thenReturn(properties1);
         when(propertiesReader.loadProperties(properties2Path)).thenReturn(properties2);

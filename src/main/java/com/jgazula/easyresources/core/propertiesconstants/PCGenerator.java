@@ -1,8 +1,8 @@
 package com.jgazula.easyresources.core.propertiesconstants;
 
 import com.jgazula.easyresources.core.internal.classgeneration.ClassGenerator;
+import com.jgazula.easyresources.core.internal.classgeneration.ClassGeneratorConfig;
 import com.jgazula.easyresources.core.internal.classgeneration.ClassGeneratorFactory;
-import com.jgazula.easyresources.core.internal.classgeneration.ImmutablePoetClassGeneratorConfig;
 import com.jgazula.easyresources.core.internal.properties.PropertiesParser;
 import com.jgazula.easyresources.core.internal.properties.PropertiesReader;
 import com.jgazula.easyresources.core.internal.util.FileUtil;
@@ -57,7 +57,7 @@ class PCGenerator implements PropertiesConstants {
             throw new ValidationException("File %s does not exist", fileConfig.propertiesPath().toString());
         }
 
-        var poetConfig = ImmutablePoetClassGeneratorConfig.builder()
+        var poetConfig = ClassGeneratorConfig.builder()
                 .generatedBy(config.generatedBy())
                 .packageName(fileConfig.generatedPackageName())
                 .className(fileConfig.generatedClassName())

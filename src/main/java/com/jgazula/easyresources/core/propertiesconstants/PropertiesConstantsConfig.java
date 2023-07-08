@@ -1,34 +1,17 @@
 package com.jgazula.easyresources.core.propertiesconstants;
 
-import com.jgazula.easyresources.core.internal.util.ImmutableStyle;
+import lombok.Builder;
+import lombok.NonNull;
+import lombok.Value;
 
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 
-import org.immutables.value.Value;
-
-@ImmutableStyle
-@Value.Immutable
-public interface PropertiesConstantsConfig {
-
-    String generatedBy();
-
-    List<PropertiesConstantsFileConfig> fileConfigs();
-
-    Path destinationDir();
-
-    static Builder builder() {
-        return ImmutablePropertiesConstantsConfig.builder();
-    }
-
-    interface Builder {
-
-        Builder generatedBy(String pluginName);
-
-        Builder fileConfigs(Iterable<? extends PropertiesConstantsFileConfig> elements);
-
-        Builder destinationDir(Path path);
-
-        PropertiesConstantsConfig build();
-    }
+@Builder
+@Value
+public class PropertiesConstantsConfig {
+    @NonNull String generatedBy;
+    @Builder.Default List<PropertiesConstantsFileConfig> fileConfigs = new ArrayList<>();
+    @NonNull Path destinationDir;
 }

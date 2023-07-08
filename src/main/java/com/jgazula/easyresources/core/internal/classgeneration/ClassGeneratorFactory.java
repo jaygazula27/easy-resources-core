@@ -10,7 +10,7 @@ public class ClassGeneratorFactory {
      * Returns a {@link ClassGenerator} instance backed by the {@link PoetClassGenerator}
      * implementation.
      */
-    public ClassGenerator getGenerator(PoetClassGeneratorConfig config) {
+    public ClassGenerator getGenerator(ClassGeneratorConfig config) {
         return new PoetClassGenerator(config);
     }
 }

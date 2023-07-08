@@ -1,9 +1,14 @@
 package com.jgazula.easyresources.core.internal.classgeneration;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import com.jgazula.easyresources.core.testutil.TestConstants;
 import com.jgazula.easyresources.core.testutil.TestHelper;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
+import spoon.FluentLauncher;
+import spoon.reflect.declaration.CtClass;
+import spoon.reflect.declaration.CtField;
+import spoon.reflect.declaration.ModifierKind;
+import spoon.reflect.visitor.filter.TypeFilter;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -12,13 +17,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.io.TempDir;
-import spoon.FluentLauncher;
-import spoon.reflect.declaration.CtClass;
-import spoon.reflect.declaration.CtField;
-import spoon.reflect.declaration.ModifierKind;
-import spoon.reflect.visitor.filter.TypeFilter;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class PoetClassGeneratorTests {
 
@@ -28,7 +27,7 @@ public class PoetClassGeneratorTests {
     @Test
     public void classIsGenerated() throws IOException {
         // given
-        ImmutablePoetClassGeneratorConfig config = ImmutablePoetClassGeneratorConfig.builder()
+        ClassGeneratorConfig config = ClassGeneratorConfig.builder()
                 .generatedBy(TestConstants.TEST_PLUGIN_NAME)
                 .packageName(TestConstants.TEST_PACKAGE_NAME)
                 .className(TestConstants.TEST_CLASS_NAME)
@@ -45,7 +44,7 @@ public class PoetClassGeneratorTests {
     @Test
     public void packageNameAndClassNameIsCorrect() throws IOException {
         // given
-        ImmutablePoetClassGeneratorConfig config = ImmutablePoetClassGeneratorConfig.builder()
+        ClassGeneratorConfig config = ClassGeneratorConfig.builder()
                 .generatedBy(TestConstants.TEST_PLUGIN_NAME)
                 .packageName(TestConstants.TEST_PACKAGE_NAME)
                 .className(TestConstants.TEST_CLASS_NAME)
@@ -64,7 +63,7 @@ public class PoetClassGeneratorTests {
     @Test
     public void publicConstantStringsAreAdded() throws IOException {
         // given
-        ImmutablePoetClassGeneratorConfig config = ImmutablePoetClassGeneratorConfig.builder()
+        ClassGeneratorConfig config = ClassGeneratorConfig.builder()
                 .generatedBy(TestConstants.TEST_PLUGIN_NAME)
                 .packageName(TestConstants.TEST_PACKAGE_NAME)
                 .className(TestConstants.TEST_CLASS_NAME)
@@ -79,7 +78,7 @@ public class PoetClassGeneratorTests {
 
         // then
         CtClass<?> ctClass = getCtClass(generatedFile);
-        List<CtField> fields = ctClass.getElements(new TypeFilter<CtField>(CtField.class) {
+        List<CtField> fields = ctClass.getElements(new TypeFilter<>(CtField.class) {
             @Override
             public boolean matches(CtField element) {
                 return element.getModifiers().containsAll(Arrays.asList(ModifierKind.PUBLIC, ModifierKind.STATIC,
