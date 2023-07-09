@@ -57,14 +57,6 @@ class PCGenerator implements PropertiesConstants {
             throw new ValidationException("File %s does not exist", fileConfig.propertiesPath().toString());
         }
 
-        var poetConfig = ClassGeneratorConfig.builder()
-                .generatedBy(config.generatedBy())
-                .packageName(fileConfig.generatedPackageName())
-                .className(fileConfig.generatedClassName())
-                .build();
-
-        ClassGenerator generator = generatorFactory.getGenerator(poetConfig);
-
         Map<String, String> properties = propertiesReader.loadProperties(fileConfig.propertiesPath());
         LOGGER.debug("Successfully loaded {} properties from {}", properties.size(), fileConfig.propertiesPath());
 
@@ -72,6 +64,13 @@ class PCGenerator implements PropertiesConstants {
             LOGGER.warn("The properties file {} is empty. Skipping constants file generation.",
                     fileConfig.propertiesPath());
         } else {
+            var poetConfig = ClassGeneratorConfig.builder()
+                    .generatedBy(config.generatedBy())
+                    .packageName(fileConfig.generatedPackageName())
+                    .className(fileConfig.generatedClassName())
+                    .build();
+            ClassGenerator generator = generatorFactory.getGenerator(poetConfig);
+
             for (Map.Entry<String, String> entry : properties.entrySet()) {
                 try {
                     String variableName = propertiesParser.keyToStaticFinalVariable(entry.getKey());

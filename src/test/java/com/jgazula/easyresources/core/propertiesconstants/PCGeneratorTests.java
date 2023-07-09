@@ -1,14 +1,5 @@
 package com.jgazula.easyresources.core.propertiesconstants;
 
-import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 import com.jgazula.easyresources.core.internal.classgeneration.ClassGenerator;
 import com.jgazula.easyresources.core.internal.classgeneration.ClassGeneratorConfig;
 import com.jgazula.easyresources.core.internal.classgeneration.ClassGeneratorFactory;
@@ -18,6 +9,10 @@ import com.jgazula.easyresources.core.internal.util.FileUtil;
 import com.jgazula.easyresources.core.testutil.TestConstants;
 import com.jgazula.easyresources.core.testutil.TestHelper;
 import com.jgazula.easyresources.core.util.ValidationException;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -27,10 +22,14 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class PCGeneratorTests {
@@ -83,10 +82,6 @@ public class PCGeneratorTests {
                 .destinationDir(destinationDir)
                 .build();
 
-        ClassGenerator classGenerator = mock(ClassGenerator.class);
-        when(generatorFactory.getGenerator(any(ClassGeneratorConfig.class)))
-                .thenReturn(classGenerator);
-
         when(propertiesReader.loadProperties(propertiesPath)).thenReturn(Collections.emptyMap());
 
         // when
@@ -94,8 +89,7 @@ public class PCGeneratorTests {
                 .generate();
 
         // then
-        verify(classGenerator, never()).addPublicConstantString(anyString(), anyString());
-        verify(classGenerator, never()).write(destinationDir);
+        verify(generatorFactory, never()).getGenerator(any(ClassGeneratorConfig.class));
     }
 
     @Test

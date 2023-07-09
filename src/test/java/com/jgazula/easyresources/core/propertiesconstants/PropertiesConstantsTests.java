@@ -31,6 +31,7 @@ public class PropertiesConstantsTests {
                 .fileConfigs(Collections.singletonList(fileConfig))
                 .destinationDir(Paths.get(TestConstants.DESTINATION_DIR))
                 .build();
+
         // when
         PropertiesConstants instance = PropertiesConstants.create(config);
 
