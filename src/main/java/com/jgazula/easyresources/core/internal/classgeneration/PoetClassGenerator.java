@@ -2,9 +2,11 @@ package com.jgazula.easyresources.core.internal.classgeneration;
 
 import com.squareup.javapoet.FieldSpec;
 import com.squareup.javapoet.JavaFile;
+import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.TypeSpec;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.time.ZonedDateTime;
@@ -12,6 +14,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import javax.lang.model.element.Modifier;
 
 import org.slf4j.Logger;
@@ -29,6 +32,7 @@ public class PoetClassGenerator implements ClassGenerator {
 
     private final ClassGeneratorConfig config;
     private final List<FieldSpec> fieldSpecs = new ArrayList<>();
+    private final List<MethodSpec> methodSpecs = new ArrayList<>();
 
     public PoetClassGenerator(ClassGeneratorConfig config) {
         this.config = config;
@@ -44,10 +48,33 @@ public class PoetClassGenerator implements ClassGenerator {
     }
 
     @Override
+    public void addPrivateFinalField(Type type, String variableName) {
+        var fieldSpec = FieldSpec.builder(type, variableName)
+                .addModifiers(Modifier.PRIVATE, Modifier.FINAL)
+                .build();
+        fieldSpecs.add(fieldSpec);
+    }
+
+    @Override
+    public void addConstructorWithArgs(Map<Type, String> args) {
+        MethodSpec.Builder builder = MethodSpec.constructorBuilder()
+                .addModifiers(Modifier.PUBLIC);
+
+        args.forEach((type, name) -> {
+            builder.addParameter(type, name)
+                    .addStatement("this.$N = $N", name, name);
+        });
+
+        var methodSpec = builder.build();
+        methodSpecs.add(methodSpec);
+    }
+
+    @Override
     public Path write(Path directory) throws IOException {
         var typeSpec = TypeSpec.classBuilder(config.className())
                 .addModifiers(Modifier.PUBLIC)
                 .addFields(fieldSpecs)
+                .addMethods(methodSpecs)
                 .build();
 
         var formattedTimestamp = ZonedDateTime.now()
