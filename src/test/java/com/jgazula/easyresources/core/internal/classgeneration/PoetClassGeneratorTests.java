@@ -5,6 +5,7 @@ import com.jgazula.easyresources.core.testutil.TestHelper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import spoon.FluentLauncher;
+import spoon.reflect.code.CtAssignment;
 import spoon.reflect.declaration.CtClass;
 import spoon.reflect.declaration.CtConstructor;
 import spoon.reflect.declaration.CtField;
@@ -149,11 +150,17 @@ public class PoetClassGeneratorTests {
         CtConstructor<?> constructor = constructors.iterator().next();
 
         List<CtParameter<?>> parameters = constructor.getParameters();
+        assertThat(parameters).hasSize(2);
         parameters.sort(Comparator.comparing(CtParameter::getSimpleName)); // sometimes out of order, so sort it to make testing simpler
         assertThat(parameters.get(0).getType().getTypeDeclaration().getSimpleName()).isEqualTo(ResourceBundle.class.getSimpleName());
         assertThat(parameters.get(0).getSimpleName()).isEqualTo(RESOURCE_BUNDLE_VARIABLE_NAME);
         assertThat(parameters.get(1).getType().getTypeDeclaration().getSimpleName()).isEqualTo(String.class.getSimpleName());
         assertThat(parameters.get(1).getSimpleName()).isEqualTo(DUMMY_STRING_VARIABLE_NAME);
+
+        List<CtAssignment<?, ?>> assignments = constructor.getBody().getElements(new TypeFilter<>(CtAssignment.class));
+        assignments.sort(Comparator.comparing(CtAssignment::toString)); // sometimes out of order, so sort it to make testing simpler
+        assertThat(assignments.get(0).toString()).isEqualTo(String.format("this.%s = %s", RESOURCE_BUNDLE_VARIABLE_NAME, RESOURCE_BUNDLE_VARIABLE_NAME));
+        assertThat(assignments.get(1).toString()).isEqualTo(String.format("this.%s = %s", DUMMY_STRING_VARIABLE_NAME, DUMMY_STRING_VARIABLE_NAME));
     }
 
     private CtClass<?> getCtClass(Path generatedFile) {

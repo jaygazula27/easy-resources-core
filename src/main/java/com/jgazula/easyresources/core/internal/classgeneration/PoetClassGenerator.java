@@ -15,6 +15,8 @@ import java.time.format.FormatStyle;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.ResourceBundle;
 import javax.lang.model.element.Modifier;
 
 import org.slf4j.Logger;
@@ -44,7 +46,7 @@ public class PoetClassGenerator implements ClassGenerator {
                 .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
                 .initializer("$S", variableValue)
                 .build();
-        fieldSpecs.add(fieldSpec);
+        addFieldSpec(fieldSpec);
     }
 
     @Override
@@ -52,7 +54,7 @@ public class PoetClassGenerator implements ClassGenerator {
         var fieldSpec = FieldSpec.builder(type, variableName)
                 .addModifiers(Modifier.PRIVATE, Modifier.FINAL)
                 .build();
-        fieldSpecs.add(fieldSpec);
+        addFieldSpec(fieldSpec);
     }
 
     @Override
@@ -66,7 +68,7 @@ public class PoetClassGenerator implements ClassGenerator {
         });
 
         var methodSpec = builder.build();
-        methodSpecs.add(methodSpec);
+        addMethodSpec(methodSpec);
     }
 
     @Override
@@ -90,5 +92,13 @@ public class PoetClassGenerator implements ClassGenerator {
         LOGGER.debug("Wrote Java file for {}.{} to {}", config.packageName(), config.className(), outputPath);
 
         return outputPath;
+    }
+
+    protected void addFieldSpec(FieldSpec fieldSpec) {
+        fieldSpecs.add(fieldSpec);
+    }
+
+    protected void addMethodSpec(MethodSpec methodSpec) {
+        methodSpecs.add(methodSpec);
     }
 }

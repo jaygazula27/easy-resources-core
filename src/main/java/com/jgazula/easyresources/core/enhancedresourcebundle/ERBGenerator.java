@@ -11,6 +11,11 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.text.ChoiceFormat;
+import java.text.DateFormat;
+import java.text.Format;
+import java.text.MessageFormat;
+import java.text.NumberFormat;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
@@ -25,13 +30,15 @@ class ERBGenerator implements EnhancedResourceBundle {
     private final FileUtil fileUtil;
     private final ClassGeneratorFactory generatorFactory;
     private final PropertiesReader propertiesReader;
+    private final MessageFormat messageFormat;
 
     ERBGenerator(ERBConfig config, FileUtil fileUtil, ClassGeneratorFactory generatorFactory,
-                 PropertiesReader propertiesReader) {
+                 PropertiesReader propertiesReader, MessageFormat messageFormat) {
         this.config = config;
         this.fileUtil = fileUtil;
         this.generatorFactory = generatorFactory;
         this.propertiesReader = propertiesReader;
+        this.messageFormat = messageFormat;
     }
 
     @Override
@@ -73,6 +80,24 @@ class ERBGenerator implements EnhancedResourceBundle {
 
             // create constructor which takes in ResourceBundle as an argument
             generator.addConstructorWithArgs(Map.of(ResourceBundle.class, RESOURCE_BUNDLE_VARIABLE_NAME));
+
+            for (String key : keys) {
+                String value = bundle.getString(key);
+                messageFormat.applyPattern(value);
+
+                for (Format format : messageFormat.getFormatsByArgumentIndex()) {
+                    if (format instanceof NumberFormat) {
+                        // handles number and choice format types
+                        // treat it as a long
+                    } else if (format instanceof DateFormat) {
+                        // handles date and time format types
+                        // treat it as a Date
+                    } else {
+                        // no format type is given
+                        // treat it as a String
+                    }
+                }
+            }
         }
     }
 }
