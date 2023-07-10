@@ -15,7 +15,6 @@ import spoon.reflect.visitor.filter.TypeFilter;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -86,20 +85,15 @@ public class PoetClassGeneratorTests {
 
         // then
         CtClass<?> ctClass = getCtClass(generatedFile);
-        List<CtField> fields = ctClass.getElements(new TypeFilter<>(CtField.class) {
-            @Override
-            public boolean matches(CtField element) {
-                return element.getModifiers().containsAll(Arrays.asList(ModifierKind.PUBLIC, ModifierKind.STATIC,
-                        ModifierKind.FINAL))
-                        && element.getType().getTypeDeclaration().getSimpleName().equals(String.class.getSimpleName());
-            }
-        });
+        List<CtField<?>> fields = ctClass.getFields();
 
         assertThat(fields).hasSize(constantStringInfo.size());
-        for (CtField field : fields) {
+
+        for (CtField<?> field : fields) {
             assertThat(constantStringInfo).containsKey(field.getSimpleName());
             String varValue = constantStringInfo.get(field.getSimpleName());
 
+            assertThat(field.getModifiers()).containsExactlyInAnyOrder(ModifierKind.PUBLIC, ModifierKind.STATIC, ModifierKind.FINAL);
             assertThat(field.getAssignment().getType().getSimpleName()).isEqualTo(String.class.getSimpleName());
             assertThat(field.getAssignment().toString()).isEqualTo(String.format("\"%s\"", varValue));
         }
@@ -121,16 +115,12 @@ public class PoetClassGeneratorTests {
 
         // then
         CtClass<?> ctClass = getCtClass(generatedFile);
-        List<CtField> fields = ctClass.getElements(new TypeFilter<>(CtField.class) {
-            @Override
-            public boolean matches(CtField element) {
-                return element.getModifiers().containsAll(Arrays.asList(ModifierKind.PRIVATE, ModifierKind.FINAL))
-                        && element.getType().getTypeDeclaration().getSimpleName().equals(ResourceBundle.class.getSimpleName());
-            }
-        });
+        List<CtField<?>> fields = ctClass.getFields();
 
         assertThat(fields).hasSize(1);
-        assertThat(fields.get(0).getSimpleName()).isEqualTo(RESOURCE_BUNDLE_VARIABLE_NAME);
+        CtField<?> field = fields.get(0);
+        assertThat(field.getModifiers()).containsExactlyInAnyOrder(ModifierKind.PRIVATE, ModifierKind.FINAL);
+        assertThat(field.getSimpleName()).isEqualTo(RESOURCE_BUNDLE_VARIABLE_NAME);
     }
 
     @Test
