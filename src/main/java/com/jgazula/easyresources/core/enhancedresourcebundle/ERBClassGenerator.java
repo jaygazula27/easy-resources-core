@@ -8,8 +8,9 @@ import com.jgazula.easyresources.core.internal.classgeneration.ClassGenerator;
 public interface ERBClassGenerator extends ClassGenerator {
 
     /**
-     * Adds a constructor suitable for the enhanced resource bundle functionality.
-     * This assumes that the necessary class member fields have already been added.
+     * Adds a constructor and class fields which are necessary for the enhanced resource bundle functionality.
      */
-    void addERBConstructor();
+    void initialize();
+
+
 }

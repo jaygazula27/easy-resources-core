@@ -21,7 +21,7 @@ public class PoetERBClassGenerator extends PoetClassGenerator implements ERBClas
     }
 
     @Override
-    public void addERBConstructor() {
+    public void initialize() {
         addPrivateFinalField(ResourceBundle.class, RESOURCE_BUNDLE_VARIABLE_NAME);
         addPrivateFinalField(MessageFormat.class, MESSAGE_FORMAT_VARIABLE_NAME);
 

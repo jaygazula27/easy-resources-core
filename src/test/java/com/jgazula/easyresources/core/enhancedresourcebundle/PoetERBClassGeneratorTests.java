@@ -35,7 +35,7 @@ public class PoetERBClassGeneratorTests {
     Path tmpDir;
 
     @Test
-    public void addedConstructor() throws IOException {
+    public void initializedWithConstructorAndClassFields() throws IOException {
         // given
         ClassGeneratorConfig config = ClassGeneratorConfig.builder()
                 .generatedBy(TestConstants.TEST_PLUGIN_NAME)
@@ -45,7 +45,7 @@ public class PoetERBClassGeneratorTests {
 
         // when
         ERBClassGenerator classGenerator = new PoetERBClassGenerator(config);
-        classGenerator.addERBConstructor();
+        classGenerator.initialize();
         Path generatedFile = classGenerator.write(tmpDir);
 
         // then

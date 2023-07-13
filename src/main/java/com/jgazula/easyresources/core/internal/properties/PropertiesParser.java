@@ -11,7 +11,7 @@ public class PropertiesParser {
     private static final String UNDERSCORE = "_";
 
     /**
-     * Formats the given key to the style of static final variable. <br>
+     * Formats the given key to the style of a static final variable. <br>
      * For example, {@code my.key} becomes {@code MY_KEY}
      */
     public String keyToStaticFinalVariable(String key) {
@@ -29,6 +29,30 @@ public class PropertiesParser {
                 if ((i + 1) != tokens.length) {
                     sb.append(UNDERSCORE);
                 }
+            }
+            return sb.toString();
+        }
+    }
+
+    /**
+     * Formats the given key to the style of a camel case method name. <br>
+     * For example, {@code my.key} becomes {@code myKey}
+     */
+    public String keyToMethodName(String key) {
+        if (key == null || key.isEmpty()) {
+            throw new IllegalArgumentException("Cannot parse null or empty property key.");
+        }
+
+        String[] tokens = NON_WORD_AND_UNDERSCORE_PATTERN.split(key);
+        if (tokens.length == 1) {
+            return tokens[0];
+        } else {
+            var sb = new StringBuilder();
+            sb.append(tokens[0]);
+
+            for (int i = 1; i < tokens.length; i++) {
+                sb.append(Character.toUpperCase(tokens[i].charAt(0)));
+                sb.append(tokens[i].substring(1));
             }
             return sb.toString();
         }
