@@ -20,7 +20,6 @@ import java.util.stream.IntStream;
 public class PoetERBClassGenerator extends PoetClassGenerator implements ERBClassGenerator {
 
     static final String RESOURCE_BUNDLE_VARIABLE_NAME = "resourceBundle";
-    static final String MESSAGE_FORMAT_VARIABLE_NAME = "messageFormatter";
     private static final String ARGUMENT_NAME = "arg";
     private static final String MESSAGE_VARIABLE_NAME = "message";
     private static final String MESSAGE_ARGUMENTS_VARIABLE_NAME = "messageArguments";
@@ -32,15 +31,11 @@ public class PoetERBClassGenerator extends PoetClassGenerator implements ERBClas
     @Override
     public void initialize() {
         addPrivateFinalField(ResourceBundle.class, RESOURCE_BUNDLE_VARIABLE_NAME);
-        addPrivateFinalField(MessageFormat.class, MESSAGE_FORMAT_VARIABLE_NAME);
 
         MethodSpec methodSpec = MethodSpec.constructorBuilder()
                 .addModifiers(Modifier.PUBLIC)
                 .addParameter(ResourceBundle.class, RESOURCE_BUNDLE_VARIABLE_NAME)
                 .addStatement("this.$N = $N", RESOURCE_BUNDLE_VARIABLE_NAME, RESOURCE_BUNDLE_VARIABLE_NAME)
-                .addCode("$L", "\n")
-                .addStatement("this.$N = new $T(\"\")", MESSAGE_FORMAT_VARIABLE_NAME, MessageFormat.class)
-                .addStatement("this.$N.setLocale(this.$N.getLocale())", MESSAGE_FORMAT_VARIABLE_NAME, RESOURCE_BUNDLE_VARIABLE_NAME)
                 .build();
         addMethodSpec(methodSpec);
     }
