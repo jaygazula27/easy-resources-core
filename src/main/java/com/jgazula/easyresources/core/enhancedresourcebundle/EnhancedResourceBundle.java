@@ -1,6 +1,7 @@
 package com.jgazula.easyresources.core.enhancedresourcebundle;
 
 import com.jgazula.easyresources.core.internal.classgeneration.ClassGeneratorFactory;
+import com.jgazula.easyresources.core.internal.properties.PropertiesParser;
 import com.jgazula.easyresources.core.internal.properties.PropertiesReader;
 import com.jgazula.easyresources.core.internal.util.FileUtil;
 
@@ -25,6 +26,7 @@ public interface EnhancedResourceBundle {
      */
     static EnhancedResourceBundle create(ERBConfig config) {
         Objects.requireNonNull(config, "config cannot be null when creating a EnhancedResourceBundle instance.");
-        return new ERBGenerator(config, new FileUtil(), new ClassGeneratorFactory(), new PropertiesReader(), new MessageFormat(""));
+        return new ERBGenerator(config, new FileUtil(), new ClassGeneratorFactory(), new PropertiesReader(),
+                new MessageFormat(""), new PropertiesParser());
     }
 }

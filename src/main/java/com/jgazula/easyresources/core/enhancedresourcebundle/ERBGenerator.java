@@ -2,6 +2,7 @@ package com.jgazula.easyresources.core.enhancedresourcebundle;
 
 import com.jgazula.easyresources.core.internal.classgeneration.ClassGeneratorConfig;
 import com.jgazula.easyresources.core.internal.classgeneration.ClassGeneratorFactory;
+import com.jgazula.easyresources.core.internal.properties.PropertiesParser;
 import com.jgazula.easyresources.core.internal.properties.PropertiesReader;
 import com.jgazula.easyresources.core.internal.util.FileUtil;
 import com.jgazula.easyresources.core.util.ValidationException;
@@ -26,14 +27,16 @@ class ERBGenerator implements EnhancedResourceBundle {
     private final ClassGeneratorFactory generatorFactory;
     private final PropertiesReader propertiesReader;
     private final MessageFormat messageFormat;
+    private final PropertiesParser propertiesParser;
 
     ERBGenerator(ERBConfig config, FileUtil fileUtil, ClassGeneratorFactory generatorFactory,
-                 PropertiesReader propertiesReader, MessageFormat messageFormat) {
+                 PropertiesReader propertiesReader, MessageFormat messageFormat, PropertiesParser propertiesParser) {
         this.config = config;
         this.fileUtil = fileUtil;
         this.generatorFactory = generatorFactory;
         this.propertiesReader = propertiesReader;
         this.messageFormat = messageFormat;
+        this.propertiesParser = propertiesParser;
     }
 
     @Override
@@ -68,13 +71,14 @@ class ERBGenerator implements EnhancedResourceBundle {
                     .packageName(bundleConfig.generatedPackageName())
                     .className(bundleConfig.generatedClassName())
                     .build();
-            ERBClassGenerator generator = generatorFactory.getERBClassGenerator(poetConfig);
+            ERBClassGenerator classGenerator = generatorFactory.getERBClassGenerator(poetConfig);
 
-            generator.initialize();
+            classGenerator.initialize();
 
             for (String key : keys) {
                 String value = bundle.getString(key);
                 messageFormat.applyPattern(value);
+
 
                 for (Format format : messageFormat.getFormatsByArgumentIndex()) {
                     if (format instanceof NumberFormat) {
