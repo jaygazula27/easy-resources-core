@@ -41,13 +41,14 @@ public class PoetERBClassGenerator extends PoetClassGenerator implements ERBClas
     }
 
     @Override
-    public void addMethod(String name, List<Type> argTypes, String key) {
+    public void addMethod(String key, String name, List<Type> argTypes) {
         List<ParameterSpec> params = IntStream.range(0, argTypes.size())
                 .mapToObj(i -> ParameterSpec.builder(argTypes.get(i), ARGUMENT_NAME + i).build())
                 .collect(Collectors.toList());
 
         MethodSpec.Builder builder = MethodSpec.methodBuilder(name)
                 .addModifiers(Modifier.PUBLIC)
+                .returns(String.class)
                 .addParameters(params)
                 .addStatement("$T $N = this.$N.getString($S)", String.class, MESSAGE_VARIABLE_NAME,
                         RESOURCE_BUNDLE_VARIABLE_NAME, key);
