@@ -13,6 +13,7 @@ public class FileUtil {
     /**
      * Same as {@link Files#exists(Path, LinkOption...)}.
      */
+    @ExcludeFromJacocoGeneratedReport
     public boolean exists(Path path) {
         return Files.exists(path);
     }
