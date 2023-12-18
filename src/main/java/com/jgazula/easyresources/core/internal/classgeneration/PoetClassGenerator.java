@@ -41,34 +41,37 @@ public class PoetClassGenerator implements ClassGenerator {
     }
 
     @Override
-    public void addPublicConstantString(String variableName, String variableValue) {
+    public ClassGenerator addPublicConstantString(String variableName, String variableValue) {
         var fieldSpec = FieldSpec.builder(String.class, variableName)
                 .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
                 .initializer("$S", variableValue)
                 .build();
         addFieldSpec(fieldSpec);
+        return this;
     }
 
     @Override
-    public void addPrivateFinalField(Type type, String variableName) {
-        var fieldSpec = FieldSpec.builder(type, variableName)
+    public ClassGenerator addPrivateFinalField(ClassGeneratorVariable field) {
+        var fieldSpec = FieldSpec.builder(field.type(), field.name())
                 .addModifiers(Modifier.PRIVATE, Modifier.FINAL)
                 .build();
         addFieldSpec(fieldSpec);
+        return this;
     }
 
     @Override
-    public void addConstructorWithArgs(Map<Type, String> args) {
+    public ClassGenerator addConstructorWithArgs(List<ClassGeneratorVariable> args) {
         MethodSpec.Builder builder = MethodSpec.constructorBuilder()
                 .addModifiers(Modifier.PUBLIC);
 
-        args.forEach((type, name) -> {
-            builder.addParameter(type, name)
-                    .addStatement("this.$N = $N", name, name);
+        args.forEach(arg -> {
+            builder.addParameter(arg.type(), arg.name())
+                    .addStatement("this.$N = $N", arg.name(), arg.name());
         });
 
         var methodSpec = builder.build();
         addMethodSpec(methodSpec);
+        return this;
     }
 
     @Override

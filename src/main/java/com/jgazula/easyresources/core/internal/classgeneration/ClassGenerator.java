@@ -3,6 +3,7 @@ package com.jgazula.easyresources.core.internal.classgeneration;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -13,18 +14,17 @@ public interface ClassGenerator {
     /**
      * Adds a public static final field of type {@link String}.
      */
-    void addPublicConstantString(String variableName, String variableValue);
+    ClassGenerator addPublicConstantString(String variableName, String variableValue);
 
     /**
      * Adds a private final field (presumably initialized in the constructor).
      */
-    void addPrivateFinalField(Type type, String variableName);
+    ClassGenerator addPrivateFinalField(ClassGeneratorVariable field);
 
     /**
      * Adds a public all-args constructor.
-     * @param args key-value pairs of variable type and name
      */
-    void addConstructorWithArgs(Map<Type, String> args);
+    ClassGenerator addConstructorWithArgs(List<ClassGeneratorVariable> args);
 
     /**
      * Writes the generated Java file to the given directory.

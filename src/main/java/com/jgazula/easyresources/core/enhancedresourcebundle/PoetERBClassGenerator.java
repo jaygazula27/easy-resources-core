@@ -1,6 +1,7 @@
 package com.jgazula.easyresources.core.enhancedresourcebundle;
 
 import com.jgazula.easyresources.core.internal.classgeneration.ClassGeneratorConfig;
+import com.jgazula.easyresources.core.internal.classgeneration.ClassGeneratorVariable;
 import com.jgazula.easyresources.core.internal.classgeneration.PoetClassGenerator;
 import com.squareup.javapoet.CodeBlock;
 import com.squareup.javapoet.MethodSpec;
@@ -30,14 +31,9 @@ public class PoetERBClassGenerator extends PoetClassGenerator implements ERBClas
 
     @Override
     public void initialize() {
-        addPrivateFinalField(ResourceBundle.class, RESOURCE_BUNDLE_VARIABLE_NAME);
-
-        MethodSpec methodSpec = MethodSpec.constructorBuilder()
-                .addModifiers(Modifier.PUBLIC)
-                .addParameter(ResourceBundle.class, RESOURCE_BUNDLE_VARIABLE_NAME)
-                .addStatement("this.$N = $N", RESOURCE_BUNDLE_VARIABLE_NAME, RESOURCE_BUNDLE_VARIABLE_NAME)
-                .build();
-        addMethodSpec(methodSpec);
+        var resourceBundleVar = new ClassGeneratorVariable(ResourceBundle.class, RESOURCE_BUNDLE_VARIABLE_NAME);
+        addPrivateFinalField(resourceBundleVar);
+        addConstructorWithArgs(List.of(resourceBundleVar));
     }
 
     @Override

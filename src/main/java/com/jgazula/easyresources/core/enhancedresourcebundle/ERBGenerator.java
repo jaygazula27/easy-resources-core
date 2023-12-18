@@ -10,13 +10,20 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.Format;
 import java.text.MessageFormat;
 import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Date;
 import java.util.ResourceBundle;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 class ERBGenerator implements EnhancedResourceBundle {
 
@@ -62,7 +69,12 @@ class ERBGenerator implements EnhancedResourceBundle {
         ResourceBundle bundle = propertiesReader.getBundle(bundleConfig.bundleName(), bundleConfig.bundlePath());
         LOGGER.debug("Successfully loaded {} resource bundle in {}", bundleConfig.bundleName(), bundleConfig.bundlePath());
 
-        Set<String> keys = bundle.keySet();
+        // Sort the keys for deterministic ordering
+        // (which makes testing easier as well)
+        var keySet = bundle.keySet();
+        var keys = new ArrayList<>(keySet);
+        Collections.sort(keys);
+
         if (keys.isEmpty()) {
             LOGGER.warn("The resource bundle {} is empty. Skipping enhancing of resource bundle.", bundleConfig.bundleName());
         } else {
@@ -72,27 +84,42 @@ class ERBGenerator implements EnhancedResourceBundle {
                     .className(bundleConfig.generatedClassName())
                     .build();
             ERBClassGenerator classGenerator = generatorFactory.getERBClassGenerator(poetConfig);
-
             classGenerator.initialize();
 
-            for (String key : keys) {
+            for (var key : keys) {
                 String value = bundle.getString(key);
-                messageFormat.applyPattern(value);
-
-
-                for (Format format : messageFormat.getFormatsByArgumentIndex()) {
-                    if (format instanceof NumberFormat) {
-                        // handles number and choice format types
-                        // treat it as a long
-                    } else if (format instanceof DateFormat) {
-                        // handles date and time format types
-                        // treat it as a Date
-                    } else {
-                        // no format type is given
-                        // treat it as a String
-                    }
-                }
+                generateForKey(classGenerator, key, value);
             }
+
+            Path writtenPath = classGenerator.write(config.destinationDir());
+            LOGGER.debug("Wrote enhanced resource bundle to {}", writtenPath);
+            LOGGER.info("Generated enhanced resource bundle for {}", bundleConfig.bundleName());
+        }
+    }
+
+    private void generateForKey(ERBClassGenerator classGenerator, String key, String value) {
+        messageFormat.applyPattern(value);
+        var formats = messageFormat.getFormatsByArgumentIndex();
+
+        var argTypes = Arrays.stream(formats)
+                .map(this::mapFormatToArgType)
+                .collect(Collectors.toList());
+        classGenerator.addMethod(key, propertiesParser.keyToMethodName(key), argTypes);
+    }
+
+    private Type mapFormatToArgType(Format format) {
+        if (format instanceof NumberFormat) {
+            // handles number and choice format types
+            // treat it as a long
+            return Long.class;
+        } else if (format instanceof DateFormat) {
+            // handles date and time format types
+            // treat it as a Date
+            return Date.class;
+        } else {
+            // no format type is given
+            // treat it as a String
+            return String.class;
         }
     }
 }

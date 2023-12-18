@@ -53,12 +53,6 @@
             <version>1.7.36</version>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>fr.inria.gforge.spoon</groupId>
-            <artifactId>spoon-core</artifactId>
-            <version>10.2.0</version>
-            <scope>test</scope>
-        </dependency>
     </dependencies>
 
     <build>
