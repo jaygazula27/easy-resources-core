@@ -13,11 +13,11 @@ public interface ERBClassGenerator extends ClassGenerator {
     /**
      * Adds a constructor and class fields which are necessary for the enhanced resource bundle functionality.
      */
-    void initialize();
+    ERBClassGenerator initialize();
 
     /**
      * Adds a method with the given argument types. This should also create the necessary statements within
      * the method to implement the enhanced resource bundle functionality.
      */
-    void addMethod(String key, String name, List<Type> argTypes);
+    ERBClassGenerator addMethod(String key, String name, List<Type> argTypes);
 }

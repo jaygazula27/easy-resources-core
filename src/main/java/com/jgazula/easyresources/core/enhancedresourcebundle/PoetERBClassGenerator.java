@@ -30,14 +30,15 @@ public class PoetERBClassGenerator extends PoetClassGenerator implements ERBClas
     }
 
     @Override
-    public void initialize() {
+    public ERBClassGenerator initialize() {
         var resourceBundleVar = new ClassGeneratorVariable(ResourceBundle.class, RESOURCE_BUNDLE_VARIABLE_NAME);
         addPrivateFinalField(resourceBundleVar);
         addConstructorWithArgs(List.of(resourceBundleVar));
+        return this;
     }
 
     @Override
-    public void addMethod(String key, String name, List<Type> argTypes) {
+    public ERBClassGenerator addMethod(String key, String name, List<Type> argTypes) {
         List<ParameterSpec> params = IntStream.range(0, argTypes.size())
                 .mapToObj(i -> ParameterSpec.builder(argTypes.get(i), ARGUMENT_NAME + i).build())
                 .collect(Collectors.toList());
@@ -64,5 +65,6 @@ public class PoetERBClassGenerator extends PoetClassGenerator implements ERBClas
 
         MethodSpec methodSpec = builder.build();
         addMethodSpec(methodSpec);
+        return this;
     }
 }
