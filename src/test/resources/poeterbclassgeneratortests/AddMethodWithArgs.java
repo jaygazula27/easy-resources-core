@@ -2,9 +2,9 @@
 // December 18, 2023 at 3:00:00 AM EST
 package com.jgazula.test;
 
-import java.lang.Long;
 import java.lang.Object;
 import java.lang.String;
+import java.math.BigDecimal;
 import java.text.MessageFormat;
 import java.util.Date;
 import java.util.ResourceBundle;
@@ -16,9 +16,9 @@ public class TestClass {
         this.resourceBundle = resourceBundle;
     }
 
-    public String myTestKey(Long arg0, Date arg1, String arg2) {
+    public String myTestKey(BigDecimal arg0, Date arg1, String arg2, int arg3) {
         String message = this.resourceBundle.getString("my.test.key");
-        Object[] messageArguments = {arg0, arg1, arg2};
+        Object[] messageArguments = {arg0, arg1, arg2, arg3};
         return new MessageFormat(message, this.resourceBundle.getLocale()).format(messageArguments);
     }
 }

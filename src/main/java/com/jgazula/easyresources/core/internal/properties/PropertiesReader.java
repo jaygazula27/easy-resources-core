@@ -1,18 +1,12 @@
 package com.jgazula.easyresources.core.internal.properties;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLClassLoader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.FileVisitOption;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
-import java.util.ResourceBundle;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
@@ -35,14 +29,9 @@ public class PropertiesReader {
     }
 
     /**
-     * Loads the {@link ResourceBundle} with the given name and path.
+     * Loads/streams all the properties files which begin with the given {@code bundleName} at the given {@code bundlePath}.
+     * This enables reading all the possible properties for the given resource bundle.
      */
-    public ResourceBundle getBundle(String bundleName, Path bundlePath) throws IOException {
-        try (URLClassLoader loader = new URLClassLoader(new URL[]{bundlePath.toUri().toURL()})) {
-            return ResourceBundle.getBundle(bundleName, Locale.getDefault(), loader);
-        }
-    }
-
     public Stream<Path> getResourceBundlePropertyFiles(Path bundlePath, String bundleName) throws IOException {
         var propertiesPattern = Pattern.compile(String.format(PROPERTIES_MATCHER_PATTERN_FORMAT, bundleName));
 

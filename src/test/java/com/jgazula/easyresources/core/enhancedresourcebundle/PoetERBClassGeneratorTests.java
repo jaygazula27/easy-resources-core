@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.nio.file.Path;
 import java.util.Collections;
 import java.util.Date;
@@ -74,7 +75,7 @@ public class PoetERBClassGeneratorTests {
         // when
         Path generatedFile = new PoetERBClassGenerator(config)
                 .initialize()
-                .addMethod(TEST_KEY, TEST_KEY_METHOD_NAME, List.of(Long.class, Date.class, String.class))
+                .addMethod(TEST_KEY, TEST_KEY_METHOD_NAME, List.of(BigDecimal.class, Date.class, String.class, int.class))
                 .write(tmpDir);
 
         // then
