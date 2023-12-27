@@ -115,7 +115,7 @@ class ERBGenerator implements EnhancedResourceBundle {
                 }
             }
 
-            // treat all other number formats as ints
+            // treat all other number formats as int
             return int.class;
         } else if (format instanceof DateFormat) {
             // treat it as a Date
