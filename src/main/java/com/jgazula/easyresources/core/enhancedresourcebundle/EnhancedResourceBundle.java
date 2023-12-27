@@ -26,7 +26,7 @@ public interface EnhancedResourceBundle {
      */
     static EnhancedResourceBundle create(ERBConfig config) {
         Objects.requireNonNull(config, "config cannot be null when creating a EnhancedResourceBundle instance.");
-        return new ERBGenerator(config, new FileUtil(), new ClassGeneratorFactory(), new PropertiesReader(),
+        return new ERBGenerator(config, new ClassGeneratorFactory(), new PropertiesReader(),
                 new MessageFormat(""), new PropertiesParser());
     }
 }

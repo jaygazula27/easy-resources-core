@@ -4,7 +4,6 @@ import com.jgazula.easyresources.core.internal.classgeneration.ClassGeneratorCon
 import com.jgazula.easyresources.core.internal.classgeneration.ClassGeneratorFactory;
 import com.jgazula.easyresources.core.internal.properties.PropertiesParser;
 import com.jgazula.easyresources.core.internal.properties.PropertiesReader;
-import com.jgazula.easyresources.core.internal.util.FileUtil;
 import com.jgazula.easyresources.core.testutil.TestConstants;
 import com.jgazula.easyresources.core.util.ValidationException;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,7 +15,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.MessageFormat;
 import java.util.Collections;
@@ -37,9 +35,6 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class ERBGeneratorTests {
-
-    @Mock
-    private FileUtil fileUtil;
 
     @Mock
     private ClassGeneratorFactory generatorFactory;
@@ -66,7 +61,7 @@ class ERBGeneratorTests {
                 .build();
 
         // when
-        new ERBGenerator(config, fileUtil, generatorFactory, propertiesReader, messageFormat, propertiesParser)
+        new ERBGenerator(config, generatorFactory, propertiesReader, messageFormat, propertiesParser)
                 .generate();
 
         // then
@@ -89,10 +84,8 @@ class ERBGeneratorTests {
                 .destinationDir(Paths.get(TestConstants.DESTINATION_DIR))
                 .build();
 
-        when(fileUtil.exists(any(Path.class))).thenReturn(false);
-
         // when
-        var generator = new ERBGenerator(config, fileUtil, generatorFactory, propertiesReader,
+        var generator = new ERBGenerator(config, generatorFactory, propertiesReader,
                 messageFormat, propertiesParser);
 
         // then
@@ -115,13 +108,11 @@ class ERBGeneratorTests {
                 .destinationDir(Paths.get(TestConstants.DESTINATION_DIR))
                 .build();
 
-        when(fileUtil.exists(any(Path.class))).thenReturn(true);
-
         when(propertiesReader.getBundle(TestConstants.TEST_RESOURCE_BUNDLE_NAME, TestConstants.TEST_RESOURCE_BUNDLE_PATH))
                 .thenReturn(new EmptyResources());
 
         // when
-        new ERBGenerator(config, fileUtil, generatorFactory, propertiesReader, messageFormat, propertiesParser)
+        new ERBGenerator(config, generatorFactory, propertiesReader, messageFormat, propertiesParser)
                 .generate();
 
         // then
@@ -145,8 +136,6 @@ class ERBGeneratorTests {
                 .destinationDir(destinationDir)
                 .build();
 
-        when(fileUtil.exists(any(Path.class))).thenReturn(true);
-
         var resourceBundle = new TestResources();
         when(propertiesReader.getBundle(TestConstants.TEST_RESOURCE_BUNDLE_NAME, TestConstants.TEST_RESOURCE_BUNDLE_PATH))
                 .thenReturn(resourceBundle);
@@ -159,7 +148,7 @@ class ERBGeneratorTests {
         when(propertiesParser.keyToMethodName(anyString())).thenCallRealMethod();
 
         // when
-        new ERBGenerator(config, fileUtil, generatorFactory, propertiesReader, messageFormat, propertiesParser)
+        new ERBGenerator(config, generatorFactory, propertiesReader, messageFormat, propertiesParser)
                 .generate();
 
         // then

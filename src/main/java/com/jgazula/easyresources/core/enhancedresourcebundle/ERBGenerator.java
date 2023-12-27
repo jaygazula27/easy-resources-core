@@ -4,42 +4,39 @@ import com.jgazula.easyresources.core.internal.classgeneration.ClassGeneratorCon
 import com.jgazula.easyresources.core.internal.classgeneration.ClassGeneratorFactory;
 import com.jgazula.easyresources.core.internal.properties.PropertiesParser;
 import com.jgazula.easyresources.core.internal.properties.PropertiesReader;
-import com.jgazula.easyresources.core.internal.util.FileUtil;
-import com.jgazula.easyresources.core.util.ValidationException;
+import com.jgazula.easyresources.core.internal.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.lang.reflect.Type;
+import java.math.BigDecimal;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.Format;
 import java.text.MessageFormat;
 import java.text.NumberFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Date;
-import java.util.ResourceBundle;
-import java.util.Set;
+import java.util.TreeMap;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 class ERBGenerator implements EnhancedResourceBundle {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ERBGenerator.class);
 
     private final ERBConfig config;
-    private final FileUtil fileUtil;
     private final ClassGeneratorFactory generatorFactory;
     private final PropertiesReader propertiesReader;
     private final MessageFormat messageFormat;
     private final PropertiesParser propertiesParser;
 
-    ERBGenerator(ERBConfig config, FileUtil fileUtil, ClassGeneratorFactory generatorFactory,
+    ERBGenerator(ERBConfig config, ClassGeneratorFactory generatorFactory,
                  PropertiesReader propertiesReader, MessageFormat messageFormat, PropertiesParser propertiesParser) {
         this.config = config;
-        this.fileUtil = fileUtil;
         this.generatorFactory = generatorFactory;
         this.propertiesReader = propertiesReader;
         this.messageFormat = messageFormat;
@@ -61,22 +58,23 @@ class ERBGenerator implements EnhancedResourceBundle {
     private void generateEnhancedResourceBundle(ERBBundleConfig bundleConfig) throws IOException {
         LOGGER.debug("Generating enhanced resource bundle for {}", bundleConfig.bundlePath());
 
-        if (!fileUtil.exists(Paths.get(bundleConfig.bundlePath().toString(), bundleConfig.bundleName()))) {
-            throw new ValidationException("Resource bundle %s not found in %s", bundleConfig.bundleName(),
-                    bundleConfig.bundlePath().toString());
+        // Ensure the keys are sorted for deterministic ordering
+        // (which makes testing easier as well)
+        var properties = new TreeMap<String, String>();
+        try (Stream<Path> files =
+                     propertiesReader.getResourceBundlePropertyFiles(bundleConfig.bundlePath(), bundleConfig.bundleName())) {
+            files.forEach(path -> {
+                try {
+                    properties.putAll(propertiesReader.loadProperties(path));
+                } catch (IOException e) {
+                    throw new UncheckedIOException("Unable to load properties for file: " + path.toString(), e);
+                }
+            });
         }
 
-        ResourceBundle bundle = propertiesReader.getBundle(bundleConfig.bundleName(), bundleConfig.bundlePath());
-        LOGGER.debug("Successfully loaded {} resource bundle in {}", bundleConfig.bundleName(), bundleConfig.bundlePath());
-
-        // Sort the keys for deterministic ordering
-        // (which makes testing easier as well)
-        var keySet = bundle.keySet();
-        var keys = new ArrayList<>(keySet);
-        Collections.sort(keys);
-
-        if (keys.isEmpty()) {
-            LOGGER.warn("The resource bundle {} is empty. Skipping enhancing of resource bundle.", bundleConfig.bundleName());
+        if (properties.isEmpty()) {
+            LOGGER.warn("The resource bundle {} at path {} is empty. Skipping enhancing of resource bundle.",
+                    bundleConfig.bundleName(), bundleConfig.bundlePath());
         } else {
             var poetConfig = ClassGeneratorConfig.builder()
                     .generatedBy(config.generatedBy())
@@ -86,9 +84,8 @@ class ERBGenerator implements EnhancedResourceBundle {
             ERBClassGenerator classGenerator = generatorFactory.getERBClassGenerator(poetConfig);
             classGenerator.initialize();
 
-            for (var key : keys) {
-                String value = bundle.getString(key);
-                generateForKey(classGenerator, key, value);
+            for (var entry : properties.entrySet()) {
+                generateForKey(classGenerator, entry.getKey(), entry.getValue());
             }
 
             Path writtenPath = classGenerator.write(config.destinationDir());
@@ -109,15 +106,21 @@ class ERBGenerator implements EnhancedResourceBundle {
 
     private Type mapFormatToArgType(Format format) {
         if (format instanceof NumberFormat) {
-            // handles number and choice format types
-            // treat it as a long
-            return Long.class;
+            if (format instanceof DecimalFormat) {
+                var decimalFormat = (DecimalFormat) format;
+                if (!StringUtil.isNullOrEmpty(decimalFormat.getPositivePrefix()) ||
+                        !StringUtil.isNullOrEmpty(decimalFormat.getPositiveSuffix())) {
+                    // assume either percent or currency
+                    return BigDecimal.class;
+                }
+            }
+
+            // treat all other number formats as ints
+            return int.class;
         } else if (format instanceof DateFormat) {
-            // handles date and time format types
             // treat it as a Date
             return Date.class;
         } else {
-            // no format type is given
             // treat it as a String
             return String.class;
         }
